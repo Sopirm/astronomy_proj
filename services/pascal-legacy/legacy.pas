@@ -3,7 +3,7 @@ program LegacyCSV;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, DateUtils, Process;
+  SysUtils, DateUtils, Process, Crt;
 
 function GetEnvDef(const name, def: string): string;
 var v: string;
@@ -50,7 +50,7 @@ begin
   copyCmd := 'psql "host=' + pghost + ' port=' + pgport + ' user=' + pguser + ' dbname=' + pgdb + '" ' +
              '-c "\copy telemetry_legacy(recorded_at, voltage, temp, source_file) FROM ''' + fullpath + ''' WITH (FORMAT csv, HEADER true)"';
   // Mask password via env
-  SetEnvironmentVariable('PGPASSWORD', pgpass);
+  SetEnv('PGPASSWORD', pgpass);
   // Execute
   fpSystem(copyCmd);
 end;
@@ -70,3 +70,4 @@ begin
     Sleep(period * 1000);
   end;
 end.
+
