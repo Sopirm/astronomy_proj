@@ -3,7 +3,7 @@ program LegacyCSV;
 {$mode objfpc}{$H+}
 
 uses
-  SysUtils, DateUtils, Process, Crt;
+  SysUtils, DateUtils;
 
 function GetEnvDef(const name, def: string): string;
 var v: string;
@@ -19,7 +19,7 @@ end;
 
 procedure GenerateAndCopy();
 var
-  outDir, fn, fullpath, pghost, pgport, pguser, pgpass, pgdb, copyCmd: string;
+  outDir, fn, fullpath: string;
   f: TextFile;
   ts: string;
 begin
@@ -38,21 +38,9 @@ begin
              fn);
   CloseFile(f);
 
-  // COPY into Postgres
-  pghost := GetEnvDef('PGHOST', 'db');
-  pgport := GetEnvDef('PGPORT', '5432');
-  pguser := GetEnvDef('PGUSER', 'monouser');
-  pgpass := GetEnvDef('PGPASSWORD', 'monopass');
-  pgdb   := GetEnvDef('PGDATABASE', 'monolith');
-
-  // Use psql with COPY FROM PROGRAM for simplicity
-  // Here we call psql reading from file
-  copyCmd := 'psql "host=' + pghost + ' port=' + pgport + ' user=' + pguser + ' dbname=' + pgdb + '" ' +
-             '-c "\copy telemetry_legacy(recorded_at, voltage, temp, source_file) FROM ''' + fullpath + ''' WITH (FORMAT csv, HEADER true)"';
-  // Mask password via env
-  SetEnv('PGPASSWORD', pgpass);
-  // Execute
-  fpSystem(copyCmd);
+  // TODO: DB import will be added later
+  // For now just generate CSV files
+  WriteLn('[pascal] Generated CSV: ', fullpath);
 end;
 
 var period: Integer;
@@ -70,4 +58,3 @@ begin
     Sleep(period * 1000);
   end;
 end.
-
