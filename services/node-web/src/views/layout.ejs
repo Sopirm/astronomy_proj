@@ -9,82 +9,365 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <!-- Custom CSS -->
+  <!-- Custom Theme -->
+  <link rel="stylesheet" href="/css/space-theme.css">
+  
+  <!-- Advanced Custom CSS -->
   <style>
-    /* Космическая тематика */
+    /* Advanced Space Theme */
     :root {
+      /* Color Palette */
+      --space-dark: #030712;
       --space-primary: #0f172a;
       --space-secondary: #1e293b;
-      --space-accent: #3b82f6;
-      --space-text: #e2e8f0;
+      --space-tertiary: #334155;
+      
+      /* Accent Colors */
+      --neon-blue: #00d9ff;
+      --neon-purple: #b084ff;
+      --neon-green: #00ff88;
+      --neon-pink: #ff0080;
+      --neon-yellow: #ffff00;
+      
+      /* Text Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      
+      /* Gradients */
+      --gradient-cosmic: linear-gradient(135deg, #030712 0%, #1e1b4b 50%, #312e81 100%);
+      --gradient-aurora: linear-gradient(45deg, #00d9ff, #b084ff, #00ff88);
+      --gradient-nebula: radial-gradient(circle at 30% 70%, #ff008040 0%, transparent 50%), 
+                         radial-gradient(circle at 70% 20%, #00d9ff40 0%, transparent 50%), 
+                         radial-gradient(circle at 50% 50%, #b084ff20 0%, transparent 50%);
+    }
+
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
     
     body { 
-      background: linear-gradient(135deg, var(--space-primary) 0%, var(--space-secondary) 100%);
-      color: var(--space-text);
+      background: var(--space-dark);
+      background-image: 
+        var(--gradient-nebula),
+        linear-gradient(135deg, var(--space-dark) 0%, var(--space-primary) 50%, var(--space-secondary) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
       min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
     }
-    
+
+    /* Animated Background Stars */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 10s infinite linear;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes twinkle {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-100px); }
+    }
+
+    /* Advanced Cards */
     .space-card {
-      background: rgba(30, 41, 59, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(59, 130, 246, 0.2);
-      transition: all 0.3s ease;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      border-radius: 16px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
-    
+
+    .space-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+      transition: left 0.8s ease;
+    }
+
     .space-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.2);
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0, 217, 255, 0.3),
+        0 0 20px rgba(176, 132, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.5);
     }
-    
+
+    .space-card:hover::before {
+      left: 100%;
+    }
+
+    /* Glow Effects */
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      animation: glow-pulse-blue 2s infinite alternate;
+    }
+
+    .glow-purple {
+      box-shadow: 0 0 20px rgba(176, 132, 255, 0.5);
+      animation: glow-pulse-purple 2s infinite alternate;
+    }
+
+    .glow-green {
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      animation: glow-pulse-green 2s infinite alternate;
+    }
+
+    @keyframes glow-pulse-blue {
+      0% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.7); }
+    }
+
+    @keyframes glow-pulse-purple {
+      0% { box-shadow: 0 0 20px rgba(176, 132, 255, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(176, 132, 255, 0.7); }
+    }
+
+    @keyframes glow-pulse-green {
+      0% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.7); }
+    }
+
+    /* Loading Animations */
     .loading {
-      animation: pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      animation: cosmic-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
-    
+
+    @keyframes cosmic-pulse {
+      0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Floating Animation */
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Text Glow */
+    .text-glow {
+      text-shadow: 0 0 10px currentColor;
+    }
+
+    /* Button Styles */
+    .btn-cosmic {
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 30px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-cosmic:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 217, 255, 0.4);
+    }
+
+    .btn-cosmic::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn-cosmic:hover::before {
+      left: 100%;
+    }
+
+    /* Maps */
     #map { 
       height: 340px; 
-      border-radius: 8px;
+      border-radius: 16px;
+      border: 2px solid rgba(0, 217, 255, 0.3);
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(15, 23, 42, 0.5);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--neon-purple), var(--neon-blue));
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .space-card:hover {
+        transform: none;
+      }
     }
   </style>
 </head>
 <body>
-  <!-- Navigation -->
-  <nav class="bg-slate-800 bg-opacity-90 backdrop-filter backdrop-blur-lg border-b border-blue-500 border-opacity-30">
-    <div class="container mx-auto px-4">
-      <div class="flex items-center justify-between h-16">
+  <!-- Advanced Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-xl border-b border-neon-blue border-opacity-30">
+    <div class="container mx-auto px-6">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo & Brand -->
         <div class="flex items-center space-x-8">
-          <a href="/dashboard" class="text-xl font-bold text-blue-400 hover:text-blue-300 transition-colors">
-            🚀 Кассиопея
+          <a href="/dashboard" class="group flex items-center space-x-3">
+            <div class="relative">
+              <div class="text-3xl float glow-blue">🚀</div>
+              <div class="absolute inset-0 bg-neon-blue rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity"></div>
+            </div>
+            <div class="text-xl font-bold bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+              Кассиопея
+            </div>
           </a>
           
-          <div class="hidden md:flex space-x-6">
-            <a href="/dashboard" class="nav-link <%= (currentPath === '/dashboard') ? 'active' : '' %>">
-              📊 Дашборд
+          <!-- Main Navigation -->
+          <div class="hidden lg:flex items-center space-x-1">
+            <a href="/dashboard" class="nav-item <%= (currentPath === '/dashboard') ? 'active' : '' %>" data-tooltip="Общий обзор системы">
+              <span class="nav-icon">📊</span>
+              <span class="nav-text">Дашборд</span>
             </a>
-            <a href="/iss" class="nav-link <%= (currentPath === '/iss') ? 'active' : '' %>">
-              🛸 МКС
+            <a href="/iss" class="nav-item <%= (currentPath === '/iss') ? 'active' : '' %>" data-tooltip="Трекинг МКС">
+              <span class="nav-icon">🛸</span>
+              <span class="nav-text">МКС</span>
             </a>
-            <a href="/jwst" class="nav-link <%= (currentPath === '/jwst') ? 'active' : '' %>">
-              🔭 JWST
+            <a href="/jwst" class="nav-item <%= (currentPath === '/jwst') ? 'active' : '' %>" data-tooltip="Галерея телескопа">
+              <span class="nav-icon">🔭</span>
+              <span class="nav-text">JWST</span>
             </a>
-            <a href="/osdr" class="nav-link <%= (currentPath === '/osdr') ? 'active' : '' %>">
-              🧪 OSDR
+            <a href="/osdr" class="nav-item <%= (currentPath === '/osdr') ? 'active' : '' %>" data-tooltip="Космические эксперименты">
+              <span class="nav-icon">🧪</span>
+              <span class="nav-text">OSDR</span>
             </a>
-            <a href="/legacy" class="nav-link <%= (currentPath === '/legacy') ? 'active' : '' %>">
-              📈 Legacy
+            <a href="/astro" class="nav-item <%= (currentPath === '/astro') ? 'active' : '' %>" data-tooltip="Астрономические события">
+              <span class="nav-icon">⭐</span>
+              <span class="nav-text">Астро</span>
+            </a>
+            <a href="/legacy" class="nav-item <%= (currentPath === '/legacy') ? 'active' : '' %>" data-tooltip="Legacy данные">
+              <span class="nav-icon">📈</span>
+              <span class="nav-text">Legacy</span>
             </a>
           </div>
         </div>
         
-        <!-- Health Status -->
-        <div class="flex items-center space-x-2">
-          <div id="health-status" class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          <span class="text-sm text-gray-300">Online</span>
+        <!-- Right Side -->
+        <div class="flex items-center space-x-6">
+          <!-- System Status -->
+          <div class="hidden md:flex items-center space-x-3 px-4 py-2 bg-slate-800 bg-opacity-50 rounded-full border border-neon-green border-opacity-30">
+            <div class="flex items-center space-x-2">
+              <div id="health-status" class="w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green"></div>
+              <span class="text-sm font-medium text-neon-green">Система онлайн</span>
+            </div>
+            <div class="w-px h-4 bg-slate-600"></div>
+            <div class="text-xs text-slate-400" id="current-time">
+              <!-- Time will be updated by JS -->
+            </div>
+          </div>
+
+          <!-- Settings Button -->
+          <button class="p-3 hover:bg-slate-800 hover:bg-opacity-50 rounded-full transition-all duration-300 group">
+            <div class="text-xl group-hover:rotate-90 transition-transform duration-300">⚙️</div>
+          </button>
+
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn" class="lg:hidden p-2 hover:bg-slate-800 hover:bg-opacity-50 rounded-lg transition-all">
+            <div class="w-6 h-6 flex flex-col justify-center items-center space-y-1">
+              <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-1"></div>
+              <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-2"></div>
+              <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-3"></div>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div id="mobile-nav" class="lg:hidden absolute top-full left-0 right-0 bg-slate-900 bg-opacity-95 backdrop-blur-xl border-b border-neon-blue border-opacity-20 transform -translate-y-full opacity-0 transition-all duration-300">
+      <div class="container mx-auto px-6 py-4">
+        <div class="space-y-2">
+          <a href="/dashboard" class="mobile-nav-item <%= (currentPath === '/dashboard') ? 'active' : '' %>">
+            <span class="nav-icon">📊</span>
+            <span>Дашборд</span>
+          </a>
+          <a href="/iss" class="mobile-nav-item <%= (currentPath === '/iss') ? 'active' : '' %>">
+            <span class="nav-icon">🛸</span>
+            <span>МКС</span>
+          </a>
+          <a href="/jwst" class="mobile-nav-item <%= (currentPath === '/jwst') ? 'active' : '' %>">
+            <span class="nav-icon">🔭</span>
+            <span>JWST</span>
+          </a>
+          <a href="/osdr" class="mobile-nav-item <%= (currentPath === '/osdr') ? 'active' : '' %>">
+            <span class="nav-icon">🧪</span>
+            <span>OSDR</span>
+          </a>
+          <a href="/astro" class="mobile-nav-item <%= (currentPath === '/astro') ? 'active' : '' %>">
+            <span class="nav-icon">⭐</span>
+            <span>Астро</span>
+          </a>
+          <a href="/legacy" class="mobile-nav-item <%= (currentPath === '/legacy') ? 'active' : '' %>">
+            <span class="nav-icon">📈</span>
+            <span>Legacy</span>
+          </a>
         </div>
       </div>
     </div>
   </nav>
+
+  <!-- Navigation Spacer -->
+  <div class="h-20"></div>
 
   <!-- Main Content -->
   <main class="container mx-auto px-4 py-6">
@@ -96,43 +379,343 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   
+  <!-- Custom Effects -->
+  <script src="/js/space-effects.js"></script>
+  
   <script>
-    // Глобальные утилиты
+    // Advanced Space App Utilities
     window.SpaceApp = {
-      // Health check
+      // Enhanced Health Check
       async checkHealth() {
         try {
           const response = await axios.get('/health');
           const status = document.getElementById('health-status');
-          status.className = 'w-3 h-3 bg-green-400 rounded-full animate-pulse';
+          const statusText = document.querySelector('#health-status').nextElementSibling;
+          
+          if (response.status === 200) {
+            status.className = 'w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green';
+            statusText.textContent = 'Система онлайн';
+            statusText.className = 'text-sm font-medium text-neon-green';
+          }
         } catch (error) {
           const status = document.getElementById('health-status');
-          status.className = 'w-3 h-3 bg-red-400 rounded-full';
+          const statusText = status.nextElementSibling;
+          status.className = 'w-3 h-3 bg-red-500 rounded-full animate-pulse';
+          statusText.textContent = 'Система офлайн';
+          statusText.className = 'text-sm font-medium text-red-400';
         }
       },
       
-      // Показать загрузку
-      showLoading(elementId) {
+      // Enhanced Loading
+      showLoading(elementId, message = 'Загрузка данных...', icon = '⚡') {
         const element = document.getElementById(elementId);
         if (element) {
-          element.innerHTML = '<div class="loading text-center py-8">⚡ Загрузка данных...</div>';
+          element.innerHTML = `
+            <div class="loading text-center py-12">
+              <div class="text-4xl mb-4 cosmic-pulse">${icon}</div>
+              <div class="text-lg font-medium text-neon-blue">${message}</div>
+              <div class="mt-2 flex items-center justify-center space-x-1">
+                <div class="w-2 h-2 bg-neon-blue rounded-full animate-bounce" style="animation-delay: 0ms;"></div>
+                <div class="w-2 h-2 bg-neon-purple rounded-full animate-bounce" style="animation-delay: 150ms;"></div>
+                <div class="w-2 h-2 bg-neon-green rounded-full animate-bounce" style="animation-delay: 300ms;"></div>
+              </div>
+            </div>
+          `;
         }
+      },
+
+      // Notification System
+      showNotification(message, type = 'info', duration = 5000) {
+        const notification = document.createElement('div');
+        const colors = {
+          success: 'bg-green-600 border-green-500 text-green-100',
+          error: 'bg-red-600 border-red-500 text-red-100',
+          warning: 'bg-yellow-600 border-yellow-500 text-yellow-100',
+          info: 'bg-blue-600 border-blue-500 text-blue-100'
+        };
+        
+        notification.className = `fixed top-24 right-6 z-50 p-4 rounded-lg border backdrop-blur-lg ${colors[type]} animate__animated animate__slideInRight`;
+        notification.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <div class="text-xl">
+              ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+            </div>
+            <div class="font-medium">${message}</div>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-xl hover:opacity-70">✕</button>
+          </div>
+        `;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+          notification.classList.add('animate__slideOutRight');
+          setTimeout(() => notification.remove(), 300);
+        }, duration);
+      },
+
+      // Smooth scroll to element
+      scrollTo(elementId, offset = 0) {
+        const element = document.getElementById(elementId);
+        if (element) {
+          const y = element.offsetTop - offset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      },
+
+      // Format numbers
+      formatNumber(num, decimals = 0) {
+        return new Intl.NumberFormat('ru-RU', {
+          minimumFractionDigits: decimals,
+          maximumFractionDigits: decimals
+        }).format(num);
+      },
+
+      // Format dates
+      formatDate(dateStr, options = {}) {
+        const defaultOptions = {
+          year: 'numeric',
+          month: 'short', 
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        };
+        return new Intl.DateTimeFormat('ru-RU', { ...defaultOptions, ...options })
+          .format(new Date(dateStr));
       }
     };
-    
-    // Периодическая проверка здоровья
-    setInterval(() => {
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('🚀 SpaceApp инициализирован');
+
+      // Mobile menu functionality
+      const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+      const mobileNav = document.getElementById('mobile-nav');
+      
+      if (mobileMenuBtn && mobileNav) {
+        mobileMenuBtn.addEventListener('click', () => {
+          document.body.classList.toggle('mobile-menu-open');
+        });
+
+        // Close mobile menu on link click
+        document.querySelectorAll('.mobile-nav-item').forEach(link => {
+          link.addEventListener('click', () => {
+            document.body.classList.remove('mobile-menu-open');
+          });
+        });
+
+        // Close mobile menu on outside click
+        document.addEventListener('click', (e) => {
+          if (!mobileMenuBtn.contains(e.target) && !mobileNav.contains(e.target)) {
+            document.body.classList.remove('mobile-menu-open');
+          }
+        });
+      }
+
+      // Update current time
+      function updateTime() {
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+          timeElement.textContent = new Date().toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+      }
+      
+      updateTime();
+      setInterval(updateTime, 1000);
+
+      // Enhanced health check
       SpaceApp.checkHealth();
-    }, 30000);
+      setInterval(SpaceApp.checkHealth, 30000);
+
+      // Add smooth transitions to all pages
+      const links = document.querySelectorAll('a[href^="/"]');
+      links.forEach(link => {
+        link.addEventListener('click', (e) => {
+          // Add loading state for page transitions
+          if (link.href !== window.location.href) {
+            document.body.style.opacity = '0.8';
+            setTimeout(() => {
+              document.body.style.opacity = '1';
+            }, 200);
+          }
+        });
+      });
+
+      // Initialize tooltips
+      const tooltips = document.querySelectorAll('[data-tooltip]');
+      tooltips.forEach(element => {
+        element.addEventListener('mouseenter', function() {
+          this.style.position = 'relative';
+        });
+      });
+
+      // Add cosmic cursor trail effect
+      let mouseTrail = [];
+      document.addEventListener('mousemove', (e) => {
+        mouseTrail.push({ x: e.clientX, y: e.clientY, time: Date.now() });
+        
+        // Limit trail length
+        if (mouseTrail.length > 20) {
+          mouseTrail.shift();
+        }
+        
+        // Remove old trails
+        mouseTrail = mouseTrail.filter(point => Date.now() - point.time < 500);
+      });
+
+      // Keyboard shortcuts
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey) {
+          switch(e.key) {
+            case '1': window.location.href = '/dashboard'; break;
+            case '2': window.location.href = '/iss'; break;
+            case '3': window.location.href = '/jwst'; break;
+            case '4': window.location.href = '/osdr'; break;
+            case '5': window.location.href = '/astro'; break;
+            case '6': window.location.href = '/legacy'; break;
+          }
+        }
+      });
+
+      // Page transition effects
+      window.addEventListener('beforeunload', () => {
+        document.body.style.transition = 'opacity 0.3s ease';
+        document.body.style.opacity = '0';
+      });
+
+      console.log('✨ Расширенная функциональность загружена');
+      SpaceApp.showNotification('Космическая система готова к работе!', 'success', 3000);
+    });
   </script>
 
   <style>
-    .nav-link {
-      @apply text-gray-300 hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium transition-colors;
+    /* Advanced Navigation Styles */
+    .nav-item {
+      @apply flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-medium relative overflow-hidden;
+      color: var(--text-secondary);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid transparent;
+    }
+
+    .nav-item:hover {
+      color: var(--neon-blue);
+      background: rgba(0, 217, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.3);
+      transform: translateY(-2px);
     }
     
-    .nav-link.active {
-      @apply text-blue-400 bg-blue-500 bg-opacity-20;
+    .nav-item.active {
+      color: var(--neon-blue);
+      background: rgba(0, 217, 255, 0.15);
+      border-color: rgba(0, 217, 255, 0.5);
+      box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+    }
+
+    .nav-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .nav-item:hover::before {
+      left: 100%;
+    }
+
+    .nav-icon {
+      font-size: 1.2em;
+      filter: drop-shadow(0 0 3px currentColor);
+    }
+
+    /* Mobile Navigation */
+    .mobile-nav-item {
+      @apply flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium w-full;
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .mobile-nav-item:hover {
+      color: var(--neon-blue);
+      background: rgba(0, 217, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.2);
+    }
+
+    .mobile-nav-item.active {
+      color: var(--neon-blue);
+      background: rgba(0, 217, 255, 0.15);
+      border-color: rgba(0, 217, 255, 0.4);
+    }
+
+    /* Mobile menu animation */
+    .mobile-menu-open #mobile-nav {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .mobile-menu-open .menu-line-1 {
+      transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .mobile-menu-open .menu-line-2 {
+      opacity: 0;
+    }
+
+    .mobile-menu-open .menu-line-3 {
+      transform: rotate(-45deg) translate(7px, -6px);
+    }
+
+    /* Tooltip Styles */
+    .nav-item[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.9);
+      color: var(--text-primary);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 100;
+      animation: tooltip-appear 0.2s ease;
+    }
+
+    @keyframes tooltip-appear {
+      0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+      100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    /* Improved Form Styles */
+    .form-input {
+      @apply bg-slate-700 bg-opacity-50 border border-slate-600 rounded-lg px-4 py-3 text-sm;
+      color: var(--text-primary);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
+      background: rgba(30, 41, 59, 0.7);
+    }
+
+    .form-select {
+      @apply form-input cursor-pointer;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300d9ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+      background-position: right 12px center;
+      background-repeat: no-repeat;
+      background-size: 16px;
+      padding-right: 40px;
     }
   </style>
 </body>

@@ -16,6 +16,7 @@ class DashboardController {
       const viewData = {
         title: 'Космический Дашборд | Кассиопея',
         currentPath: req.path,
+        message: 'Node.js система успешно запущена!',
         iss: issData,
         trend: [], // фронт сам заберёт через /api/iss/trend
         jw_gallery: [], // не нужно сервером
@@ -36,6 +37,7 @@ class DashboardController {
       res.render('dashboard', {
         title: 'Космический Дашборд | Кассиопея',
         currentPath: req.path,
+        message: null, // Нет сообщения при ошибке
         iss: {},
         trend: [],
         jw_gallery: [],
