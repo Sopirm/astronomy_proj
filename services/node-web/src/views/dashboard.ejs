@@ -1,0 +1,305 @@
+<!-- Dashboard Page -->
+<div class="animate__animated animate__fadeIn">
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+      Космический Дашборд
+    </h1>
+    <p class="text-gray-400 mt-2">Мониторинг космических систем в реальном времени</p>
+    <% if (message) { %>
+      <div class="mt-4 p-4 bg-green-500 bg-opacity-20 border border-green-500 rounded-lg">
+        <p class="text-green-400">✅ <%= message %></p>
+      </div>
+    <% } %>
+  </div>
+
+  <!-- Metrics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <!-- ISS Speed -->
+    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-400">Скорость МКС</p>
+          <p class="text-2xl font-bold text-blue-400" id="iss-speed">—</p>
+          <p class="text-xs text-gray-500">км/ч</p>
+        </div>
+        <div class="text-blue-400 text-2xl">🚀</div>
+      </div>
+    </div>
+
+    <!-- ISS Altitude -->
+    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-400">Высота МКС</p>
+          <p class="text-2xl font-bold text-green-400" id="iss-altitude">—</p>
+          <p class="text-xs text-gray-500">км</p>
+        </div>
+        <div class="text-green-400 text-2xl">📡</div>
+      </div>
+    </div>
+
+    <!-- Active Systems -->
+    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-400">Активные системы</p>
+          <p class="text-2xl font-bold text-purple-400">4</p>
+          <p class="text-xs text-gray-500">онлайн</p>
+        </div>
+        <div class="text-purple-400 text-2xl">⚡</div>
+      </div>
+    </div>
+
+    <!-- Data Points -->
+    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-400">Точек данных</p>
+          <p class="text-2xl font-bold text-yellow-400" id="data-points">—</p>
+          <p class="text-xs text-gray-500">сегодня</p>
+        </div>
+        <div class="text-yellow-400 text-2xl">📊</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content Grid -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- ISS Tracking -->
+    <div class="lg:col-span-2 space-card rounded-lg p-6 animate__animated animate__fadeInLeft">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold text-blue-400">🛸 Трекинг МКС</h3>
+        <div class="flex items-center space-x-2">
+          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+          <span class="text-sm text-gray-400">Обновляется каждые 15 сек</span>
+        </div>
+      </div>
+      
+      <!-- Map Container -->
+      <div id="iss-map" class="rounded-lg border border-blue-500 border-opacity-30 mb-4"></div>
+      
+      <!-- Charts -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <h4 class="text-sm font-medium text-gray-400 mb-2">Скорость (км/ч)</h4>
+          <canvas id="speed-chart" class="w-full h-24"></canvas>
+        </div>
+        <div>
+          <h4 class="text-sm font-medium text-gray-400 mb-2">Высота (км)</h4>
+          <canvas id="altitude-chart" class="w-full h-24"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- System Status -->
+    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInRight">
+      <h3 class="text-xl font-semibold text-purple-400 mb-4">🔧 Статус систем</h3>
+      
+      <div class="space-y-4">
+        <!-- Rust ISS Service -->
+        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+            <span class="text-sm">Rust ISS API</span>
+          </div>
+          <span class="text-xs text-green-400">Online</span>
+        </div>
+
+        <!-- Pascal Legacy -->
+        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+            <span class="text-sm">Pascal Legacy</span>
+          </div>
+          <span class="text-xs text-green-400">Active</span>
+        </div>
+
+        <!-- Database -->
+        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
+            <span class="text-sm">PostgreSQL</span>
+          </div>
+          <span class="text-xs text-green-400">Healthy</span>
+        </div>
+
+        <!-- Node Web -->
+        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+          <div class="flex items-center space-x-3">
+            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <span class="text-sm">Node.js Web</span>
+          </div>
+          <span class="text-xs text-blue-400">Running</span>
+        </div>
+      </div>
+
+      <!-- Quick Actions -->
+      <div class="mt-6">
+        <h4 class="text-sm font-medium text-gray-400 mb-3">Быстрые действия</h4>
+        <div class="space-y-2">
+          <button onclick="location.href='/iss'" 
+                  class="w-full p-2 bg-blue-600 bg-opacity-20 hover:bg-opacity-30 border border-blue-500 rounded-lg text-blue-400 text-sm transition-all">
+            🛸 Подробно о МКС
+          </button>
+          <button onclick="location.href='/jwst'" 
+                  class="w-full p-2 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 border border-purple-500 rounded-lg text-purple-400 text-sm transition-all">
+            🔭 Галерея JWST
+          </button>
+          <button onclick="location.href='/legacy'" 
+                  class="w-full p-2 bg-green-600 bg-opacity-20 hover:bg-opacity-30 border border-green-500 rounded-lg text-green-400 text-sm transition-all">
+            📊 Данные Legacy
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+  console.log('🚀 Dashboard инициализирован');
+  
+  // Инициализация карты МКС
+  const map = L.map('iss-map', { 
+    attributionControl: false,
+    zoomControl: true 
+  }).setView([0, 0], 2);
+  
+  // Tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+    attribution: '',
+    noWrap: true
+  }).addTo(map);
+  
+  // МКС маркер и трек
+  let issMarker = L.marker([0, 0]).addTo(map);
+  let issTrail = L.polyline([], { 
+    color: '#3b82f6', 
+    weight: 3,
+    opacity: 0.7 
+  }).addTo(map);
+  
+  // Инициализация графиков
+  const speedChart = new Chart(document.getElementById('speed-chart'), {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Скорость',
+        data: [],
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { display: false },
+        y: { 
+          display: false,
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      },
+      elements: {
+        point: { radius: 0 }
+      }
+    }
+  });
+  
+  const altChart = new Chart(document.getElementById('altitude-chart'), {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        label: 'Высота',
+        data: [],
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        borderWidth: 2,
+        fill: true
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { display: false },
+        y: { 
+          display: false,
+          grid: { display: false }
+        }
+      },
+      plugins: {
+        legend: { display: false }
+      },
+      elements: {
+        point: { radius: 0 }
+      }
+    }
+  });
+
+  // Функция загрузки данных МКС
+  async function loadISSData() {
+    try {
+      // Временные тестовые данные (потом заменим на API)
+      const mockISSData = {
+        latitude: 51.5074,
+        longitude: -0.1278,
+        velocity: 27600,
+        altitude: 408
+      };
+      
+      // Обновляем метрики
+      document.getElementById('iss-speed').textContent = mockISSData.velocity.toLocaleString();
+      document.getElementById('iss-altitude').textContent = mockISSData.altitude.toLocaleString();
+      
+      // Обновляем карту
+      const newPos = [mockISSData.latitude, mockISSData.longitude];
+      issMarker.setLatLng(newPos);
+      map.setView(newPos, map.getZoom());
+      
+      // Добавляем точку к треку
+      const currentTrail = issTrail.getLatLngs();
+      currentTrail.push(newPos);
+      if (currentTrail.length > 50) currentTrail.shift(); // Ограничиваем историю
+      issTrail.setLatLngs(currentTrail);
+      
+      // Обновляем графики
+      const now = new Date().toLocaleTimeString();
+      
+      speedChart.data.labels.push(now);
+      speedChart.data.datasets[0].data.push(mockISSData.velocity);
+      if (speedChart.data.labels.length > 20) {
+        speedChart.data.labels.shift();
+        speedChart.data.datasets[0].data.shift();
+      }
+      speedChart.update('none');
+      
+      altChart.data.labels.push(now);
+      altChart.data.datasets[0].data.push(mockISSData.altitude);
+      if (altChart.data.labels.length > 20) {
+        altChart.data.labels.shift();
+        altChart.data.datasets[0].data.shift();
+      }
+      altChart.update('none');
+      
+    } catch (error) {
+      console.error('Ошибка загрузки данных МКС:', error);
+    }
+  }
+  
+  // Загружаем данные сразу и каждые 15 секунд
+  loadISSData();
+  setInterval(loadISSData, 15000);
+  
+  // Обновляем счётчик данных
+  document.getElementById('data-points').textContent = Math.floor(Math.random() * 1000 + 500).toLocaleString();
+});
+</script>
