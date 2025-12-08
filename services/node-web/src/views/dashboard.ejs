@@ -1,170 +1,543 @@
-<!-- Dashboard Page -->
-<div class="animate__animated animate__fadeIn">
-  <!-- Header -->
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Космический Дашборд - Кассиопея</title>
+  
+  <!-- CSS Libraries -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom Theme -->
+  <link rel="stylesheet" href="/css/space-theme.css">
+  
+  <!-- Advanced Custom CSS -->
+  <style>
+    /* Advanced Space Theme */
+    :root {
+      /* Color Palette */
+      --space-dark: #030712;
+      --space-primary: #0f172a;
+      --space-secondary: #1e293b;
+      --space-tertiary: #334155;
+      
+      /* Accent Colors */
+      --neon-blue: #00d9ff;
+      --neon-purple: #b084ff;
+      --neon-green: #00ff88;
+      --neon-pink: #ff0080;
+      --neon-yellow: #ffff00;
+      
+      /* Text Colors */
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #64748b;
+      
+      /* Gradients */
+      --gradient-cosmic: linear-gradient(135deg, #030712 0%, #1e1b4b 50%, #312e81 100%);
+      --gradient-aurora: linear-gradient(45deg, #00d9ff, #b084ff, #00ff88);
+      --gradient-nebula: radial-gradient(circle at 30% 70%, #ff008040 0%, transparent 50%), 
+                         radial-gradient(circle at 70% 20%, #00d9ff40 0%, transparent 50%), 
+                         radial-gradient(circle at 50% 50%, #b084ff20 0%, transparent 50%);
+    }
+
+    /* Global Styles */
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+    
+    body { 
+      background: var(--space-dark);
+      background-image: 
+        var(--gradient-nebula),
+        linear-gradient(135deg, var(--space-dark) 0%, var(--space-primary) 50%, var(--space-secondary) 100%);
+      background-attachment: fixed;
+      color: var(--text-primary);
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* Animated Background Stars */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, #fff, transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(255,255,255,0.8), transparent),
+        radial-gradient(1px 1px at 90px 40px, #fff, transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(255,255,255,0.6), transparent),
+        radial-gradient(2px 2px at 160px 30px, #fff, transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: twinkle 10s infinite linear;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    @keyframes twinkle {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-100px); }
+    }
+
+    /* Advanced Cards */
+    .space-card {
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      border-radius: 16px;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .space-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+      transition: left 0.8s ease;
+    }
+
+    .space-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 
+        0 20px 40px rgba(0, 217, 255, 0.3),
+        0 0 20px rgba(176, 132, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.5);
+    }
+
+    .space-card:hover::before {
+      left: 100%;
+    }
+
+    /* Metric Cards */
+    .metric-card {
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 217, 255, 0.3);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .metric-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(from 0deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+      animation: rotate 4s linear infinite;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .metric-card:hover::before {
+      opacity: 1;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-8px) rotateX(5deg);
+      box-shadow: 
+        0 25px 50px rgba(0, 217, 255, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      border-color: rgba(0, 217, 255, 0.8);
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Glow Effects */
+    .glow-blue {
+      box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
+      animation: glow-pulse-blue 2s infinite alternate;
+    }
+
+    .glow-purple {
+      box-shadow: 0 0 20px rgba(176, 132, 255, 0.5);
+      animation: glow-pulse-purple 2s infinite alternate;
+    }
+
+    .glow-green {
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+      animation: glow-pulse-green 2s infinite alternate;
+    }
+
+    .glow-yellow {
+      box-shadow: 0 0 20px rgba(255, 255, 0, 0.5);
+      animation: glow-pulse-yellow 2s infinite alternate;
+    }
+
+    @keyframes glow-pulse-blue {
+      0% { box-shadow: 0 0 20px rgba(0, 217, 255, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(0, 217, 255, 0.7); }
+    }
+
+    @keyframes glow-pulse-purple {
+      0% { box-shadow: 0 0 20px rgba(176, 132, 255, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(176, 132, 255, 0.7); }
+    }
+
+    @keyframes glow-pulse-green {
+      0% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(0, 255, 136, 0.7); }
+    }
+
+    @keyframes glow-pulse-yellow {
+      0% { box-shadow: 0 0 20px rgba(255, 255, 0, 0.3); }
+      100% { box-shadow: 0 0 30px rgba(255, 255, 0, 0.7); }
+    }
+
+    /* Loading Animations */
+    .loading {
+      animation: cosmic-pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes cosmic-pulse {
+      0%, 100% { 
+        opacity: 1;
+        transform: scale(1);
+      }
+      50% { 
+        opacity: 0.7;
+        transform: scale(1.1);
+      }
+    }
+
+    /* Floating Animation */
+    .float {
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Text Glow */
+    .text-glow {
+      text-shadow: 0 0 10px currentColor;
+    }
+
+    /* Chart Containers */
+    .chart-container {
+      background: rgba(15, 23, 42, 0.4);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      border-radius: 16px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      opacity: 0.6;
+    }
+
+    /* Status Indicators */
+    .status-indicator {
+      display: inline-flex;
+      align-items: center;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .status-online {
+      background: rgba(0, 255, 136, 0.2);
+      color: var(--neon-green);
+      border: 1px solid var(--neon-green);
+    }
+
+    /* Holographic Table */
+    .holographic-table {
+      background: rgba(15, 23, 42, 0.4);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(0, 217, 255, 0.2);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    /* Progress Bars */
+    .progress-cosmic {
+      width: 100%;
+      height: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border-radius: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .progress-cosmic::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      border-radius: 10px;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(0, 217, 255, 0.6);
+    }
+
+    /* Button Styles */
+    .btn-cosmic-primary {
+      background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+      border: none;
+      color: white;
+      padding: 14px 28px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 217, 255, 0.3);
+    }
+
+    .btn-cosmic-primary:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 8px 30px rgba(0, 217, 255, 0.5);
+      filter: brightness(1.1);
+    }
+
+    /* Maps */
+    #map, #iss-map { 
+      height: 340px; 
+      border-radius: 16px;
+      border: 2px solid rgba(0, 217, 255, 0.3);
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .space-card:hover, .metric-card:hover {
+        transform: translateY(-4px) scale(1.01);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .space-card:hover, .metric-card:hover {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body class="bg-white min-h-screen">
+
+<!-- Dashboard Content -->
+<div class="container mx-auto px-6 py-8 bg-white min-h-screen">
+  <!-- Minimal Header -->
   <div class="text-center mb-8">
-    <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
-      Космический Дашборд
-    </h1>
-    <p class="text-gray-400 mt-2">Мониторинг космических систем в реальном времени</p>
+    <div class="mb-4">
+      <h1 class="text-4xl font-bold text-black mb-2">
+        Космический Дашборд
+      </h1>
+      <p class="text-gray-600">Мониторинг МКС в реальном времени</p>
+    </div>
+    
     <% if (message) { %>
-      <div class="mt-4 p-4 bg-green-500 bg-opacity-20 border border-green-500 rounded-lg">
-        <p class="text-green-400">✅ <%= message %></p>
+      <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg inline-block">
+        <p class="text-blue-700 text-sm font-medium">✓ <%= message %></p>
       </div>
     <% } %>
   </div>
 
-  <!-- Metrics Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+  <!-- Blue Themed Metrics Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 max-w-4xl mx-auto">
     <!-- ISS Speed -->
-    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-sm hover:bg-blue-100 transition-colors">
       <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-400">Скорость МКС</p>
-          <p class="text-2xl font-bold text-blue-400" id="iss-speed">—</p>
-          <p class="text-xs text-gray-500">км/ч</p>
+        <div class="w-full">
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="text-blue-600 text-lg">🚀</span>
+            <p class="text-sm text-blue-700 font-medium">Скорость МКС</p>
+          </div>
+          <p class="text-3xl font-bold text-blue-900" id="iss-speed">—</p>
+          <p class="text-xs text-blue-600 mt-2">км/час</p>
         </div>
-        <div class="text-blue-400 text-2xl">🚀</div>
       </div>
     </div>
 
     <!-- ISS Altitude -->
-    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-sm hover:bg-blue-100 transition-colors">
       <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-400">Высота МКС</p>
-          <p class="text-2xl font-bold text-green-400" id="iss-altitude">—</p>
-          <p class="text-xs text-gray-500">км</p>
+        <div class="w-full">
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="text-blue-600 text-lg">📡</span>
+            <p class="text-sm text-blue-700 font-medium">Высота МКС</p>
+          </div>
+          <p class="text-3xl font-bold text-blue-900" id="iss-altitude">—</p>
+          <p class="text-xs text-blue-600 mt-2">км над землёй</p>
         </div>
-        <div class="text-green-400 text-2xl">📡</div>
-      </div>
-    </div>
-
-    <!-- Active Systems -->
-    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-      <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-400">Активные системы</p>
-          <p class="text-2xl font-bold text-purple-400">4</p>
-          <p class="text-xs text-gray-500">онлайн</p>
-        </div>
-        <div class="text-purple-400 text-2xl">⚡</div>
       </div>
     </div>
 
     <!-- Data Points -->
-    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInUp" style="animation-delay: 0.3s">
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-sm hover:bg-blue-100 transition-colors">
       <div class="flex items-center justify-between">
-        <div>
-          <p class="text-sm font-medium text-gray-400">Точек данных</p>
-          <p class="text-2xl font-bold text-yellow-400" id="data-points">—</p>
-          <p class="text-xs text-gray-500">сегодня</p>
+        <div class="w-full">
+          <div class="flex items-center space-x-2 mb-3">
+            <span class="text-blue-600 text-lg">📊</span>
+            <p class="text-sm text-blue-700 font-medium">Точки данных</p>
+          </div>
+          <p class="text-3xl font-bold text-blue-900" id="data-points">—</p>
+          <p class="text-xs text-blue-600 mt-2">за сегодня</p>
         </div>
-        <div class="text-yellow-400 text-2xl">📊</div>
       </div>
     </div>
   </div>
 
-  <!-- Main Content Grid -->
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+  <!-- Minimal Main Grid (white/blue/black theme) -->
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-7xl">
     <!-- ISS Tracking -->
-    <div class="lg:col-span-2 space-card rounded-lg p-6 animate__animated animate__fadeInLeft">
+    <div class="lg:col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-sm max-w-4xl">
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-xl font-semibold text-blue-400">🛸 Трекинг МКС</h3>
-        <div class="flex items-center space-x-2">
-          <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-          <span class="text-sm text-gray-400">Обновляется каждые 15 сек</span>
+        <h3 class="text-xl font-semibold text-blue-900">🛸 Трекинг МКС</h3>
+        <div class="flex items-center space-x-3">
+          <div class="flex items-center space-x-2">
+            <div class="w-2 h-2 bg-blue-600 rounded-full"></div>
+            <span class="text-sm text-blue-700">Активно</span>
+          </div>
+          <button class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm font-medium" onclick="loadISSData()">
+            Обновить
+          </button>
         </div>
       </div>
       
       <!-- Map Container -->
-      <div id="iss-map" class="rounded-lg border border-blue-500 border-opacity-30 mb-4"></div>
+      <div id="map-container" class="relative rounded-lg border border-gray-300 mb-4 overflow-hidden" style="width: 100%; height: 320px;">
+        <div id="iss-map" style="width: 100%; height: 100%;"></div>
+        
+        <!-- Minimal Data Panel (moved to bottom-left to not cover zoom controls) -->
+        <div class="absolute bottom-4 left-4 bg-black text-white p-3 rounded text-sm font-mono z-50" style="z-index: 1000;">
+          <div>Координаты: <span id="map-coords" class="text-blue-300">—</span></div>
+          <div>Скорость: <span id="map-velocity" class="text-blue-300">—</span></div>
+          <div>Высота: <span id="map-altitude" class="text-blue-300">—</span></div>
+        </div>
+      </div>
       
       <!-- Charts -->
       <div class="grid grid-cols-2 gap-4">
-        <div>
-          <h4 class="text-sm font-medium text-gray-400 mb-2">Скорость (км/ч)</h4>
-          <canvas id="speed-chart" class="w-full h-24"></canvas>
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded">
+          <h4 class="text-sm font-semibold text-blue-700 mb-3">Скорость</h4>
+          <div style="width: 100%; height: 100px; position: relative; padding: 10px;">
+            <canvas id="speed-chart" style="width: 100%; height: 100%;"></canvas>
+          </div>
         </div>
-        <div>
-          <h4 class="text-sm font-medium text-gray-400 mb-2">Высота (км)</h4>
-          <canvas id="altitude-chart" class="w-full h-24"></canvas>
+        <div class="bg-blue-50 border border-blue-200 p-4 rounded">
+          <h4 class="text-sm font-semibold text-blue-700 mb-3">Высота</h4>
+          <div style="width: 100%; height: 100px; position: relative; padding: 10px;">
+            <canvas id="altitude-chart" style="width: 100%; height: 100%;"></canvas>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- System Status -->
-    <div class="space-card rounded-lg p-6 animate__animated animate__fadeInRight">
-      <h3 class="text-xl font-semibold text-purple-400 mb-4">🔧 Статус систем</h3>
+    <!-- Minimal Navigation -->
+    <div class="bg-blue-50 border border-blue-200 rounded-lg p-6 shadow-sm max-w-sm">
+      <h3 class="text-xl font-semibold text-blue-900 mb-4">Разделы</h3>
       
-      <div class="space-y-4">
-        <!-- Rust ISS Service -->
-        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+      <div class="space-y-2">
+        <a href="/iss" class="block p-3 border border-blue-200 hover:border-blue-600 hover:bg-blue-100 rounded-lg transition-colors bg-white">
           <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-            <span class="text-sm">Rust ISS API</span>
+            <span class="text-lg">🛸</span>
+            <div>
+              <div class="font-medium text-blue-900">МКС</div>
+              <div class="text-xs text-blue-600">Детальная информация</div>
+            </div>
           </div>
-          <span class="text-xs text-green-400">Online</span>
-        </div>
-
-        <!-- Pascal Legacy -->
-        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+        </a>
+        
+        <a href="/jwst" class="block p-3 border border-blue-200 hover:border-blue-600 hover:bg-blue-100 rounded-lg transition-colors bg-white">
           <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-            <span class="text-sm">Pascal Legacy</span>
+            <span class="text-lg">🔭</span>
+            <div>
+              <div class="font-medium text-blue-900">JWST</div>
+              <div class="text-xs text-blue-600">Космические снимки</div>
+            </div>
           </div>
-          <span class="text-xs text-green-400">Active</span>
-        </div>
-
-        <!-- Database -->
-        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+        </a>
+        
+        <a href="/osdr" class="block p-3 border border-blue-200 hover:border-blue-600 hover:bg-blue-100 rounded-lg transition-colors bg-white">
           <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-green-400 rounded-full"></div>
-            <span class="text-sm">PostgreSQL</span>
+            <span class="text-lg">🧪</span>
+            <div>
+              <div class="font-medium text-blue-900">OSDR</div>
+              <div class="text-xs text-blue-600">Эксперименты</div>
+            </div>
           </div>
-          <span class="text-xs text-green-400">Healthy</span>
-        </div>
-
-        <!-- Node Web -->
-        <div class="flex items-center justify-between p-3 bg-slate-700 bg-opacity-50 rounded-lg">
+        </a>
+        
+        <a href="/legacy" class="block p-3 border border-blue-200 hover:border-blue-600 hover:bg-blue-100 rounded-lg transition-colors bg-white">
           <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-            <span class="text-sm">Node.js Web</span>
+            <span class="text-lg">📊</span>
+            <div>
+              <div class="font-medium text-blue-900">Legacy</div>
+              <div class="text-xs text-blue-600">CSV данные</div>
+            </div>
           </div>
-          <span class="text-xs text-blue-400">Running</span>
-        </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="mt-6">
-        <h4 class="text-sm font-medium text-gray-400 mb-3">Быстрые действия</h4>
-        <div class="space-y-2">
-          <button onclick="location.href='/iss'" 
-                  class="w-full p-2 bg-blue-600 bg-opacity-20 hover:bg-opacity-30 border border-blue-500 rounded-lg text-blue-400 text-sm transition-all">
-            🛸 Подробно о МКС
-          </button>
-          <button onclick="location.href='/jwst'" 
-                  class="w-full p-2 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 border border-purple-500 rounded-lg text-purple-400 text-sm transition-all">
-            🔭 Галерея JWST
-          </button>
-          <button onclick="location.href='/legacy'" 
-                  class="w-full p-2 bg-green-600 bg-opacity-20 hover:bg-opacity-30 border border-green-500 rounded-lg text-green-400 text-sm transition-all">
-            📊 Данные Legacy
-          </button>
-        </div>
+        </a>
       </div>
     </div>
   </div>
 </div>
 
 <script>
+// Server-side ISS data
+const serverIssData = <%- JSON.stringify(iss) %>;
+console.log('📊 Получены серверные данные МКС:', serverIssData);
+
 document.addEventListener('DOMContentLoaded', async () => {
   console.log('🚀 Dashboard инициализирован');
   
-  // Инициализация карты МКС
+  // Инициализация карты МКС с фиксированными размерами
   const map = L.map('iss-map', { 
     attributionControl: false,
-    zoomControl: true 
+    zoomControl: true,
+    preferCanvas: true,
+    trackResize: false
   }).setView([0, 0], 2);
+  
+  // Принудительно установить размер карты
+  setTimeout(() => {
+    map.invalidateSize(false);
+  }, 100);
   
   // Tile layer
   L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
@@ -180,7 +553,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     opacity: 0.7 
   }).addTo(map);
   
-  // Инициализация графиков
+  // Working Chart Configurations with Fixed Container
   const speedChart = new Chart(document.getElementById('speed-chart'), {
     type: 'line',
     data: {
@@ -188,27 +561,37 @@ document.addEventListener('DOMContentLoaded', async () => {
       datasets: [{
         label: 'Скорость',
         data: [],
-        borderColor: '#3b82f6',
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.05)',
         borderWidth: 2,
-        fill: true
+        fill: true,
+        tension: 0.1
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { display: false },
+        x: { 
+          display: false,
+          grid: { display: false }
+        },
         y: { 
           display: false,
           grid: { display: false }
         }
       },
       plugins: {
-        legend: { display: false }
+        legend: { display: false },
+        tooltip: { enabled: false }
       },
       elements: {
         point: { radius: 0 }
+      },
+      animation: false,
+      interaction: { intersect: false },
+      layout: {
+        padding: 0
       }
     }
   });
@@ -220,86 +603,450 @@ document.addEventListener('DOMContentLoaded', async () => {
       datasets: [{
         label: 'Высота',
         data: [],
-        borderColor: '#10b981',
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+        borderColor: '#2563eb',
+        backgroundColor: 'rgba(37, 99, 235, 0.05)',
         borderWidth: 2,
-        fill: true
+        fill: true,
+        tension: 0.1
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       scales: {
-        x: { display: false },
+        x: { 
+          display: false,
+          grid: { display: false }
+        },
         y: { 
           display: false,
           grid: { display: false }
         }
       },
       plugins: {
-        legend: { display: false }
+        legend: { display: false },
+        tooltip: { enabled: false }
       },
       elements: {
         point: { radius: 0 }
+      },
+      animation: false,
+      interaction: { intersect: false },
+      layout: {
+        padding: 0
       }
     }
   });
 
-  // Функция загрузки данных МКС
+  // Initialize with server data first, then update with API
+  let isFirstLoad = true;
+  
+  // Enhanced ISS Data Loading Function
   async function loadISSData() {
     try {
-      // Временные тестовые данные (потом заменим на API)
-      const mockISSData = {
+      let realISSData;
+      let wasFirstLoad = isFirstLoad;
+      
+      // First load: use server-side data
+      if (isFirstLoad && typeof serverIssData !== 'undefined') {
+        realISSData = {
+          latitude: serverIssData.payload?.latitude || 0,
+          longitude: serverIssData.payload?.longitude || 0,
+          velocity: serverIssData.payload?.velocity || 27600,
+          altitude: serverIssData.payload?.altitude || 408
+        };
+        isFirstLoad = false;
+        console.log('🚀 Используем серверные данные МКС:', realISSData);
+      } else {
+        // Subsequent loads: call API
+        SpaceApp.showLoading('iss-speed', 'Обновление...', '🔄');
+        
+        const response = await axios.get('/api/iss/last');
+        const issData = response.data;
+        
+        realISSData = {
+          latitude: issData.payload?.latitude || 0,
+          longitude: issData.payload?.longitude || 0,
+          velocity: issData.payload?.velocity || 27600,
+          altitude: issData.payload?.altitude || 408
+        };
+        console.log('📡 Загружены данные МКС через API:', realISSData);
+      }
+      
+      // Add some animation delay for better UX
+      setTimeout(() => {
+        // Update metric cards with animation
+        updateMetricCard('iss-speed', realISSData.velocity, 'км/ч');
+        updateMetricCard('iss-altitude', realISSData.altitude, 'км');
+        
+        // Update floating panel on map
+        updateMapPanel(realISSData);
+        
+        // Update map position
+        updateMapPosition(realISSData);
+        
+        // Update charts with new data
+        updateCharts(realISSData);
+        
+        // Show success notification
+        const message = wasFirstLoad ? 'Реальные данные МКС получены с сервера!' : 'Данные МКС обновлены через API!';
+        SpaceApp.showNotification(message, 'success', 2000);
+      }, 500);
+      
+    } catch (error) {
+      console.error('Ошибка загрузки данных МКС:', error);
+      
+      // Fallback to mock data if API fails
+      const fallbackData = {
         latitude: 51.5074,
         longitude: -0.1278,
         velocity: 27600,
         altitude: 408
       };
       
-      // Обновляем метрики
-      document.getElementById('iss-speed').textContent = mockISSData.velocity.toLocaleString();
-      document.getElementById('iss-altitude').textContent = mockISSData.altitude.toLocaleString();
-      
-      // Обновляем карту
-      const newPos = [mockISSData.latitude, mockISSData.longitude];
-      issMarker.setLatLng(newPos);
-      map.setView(newPos, map.getZoom());
-      
-      // Добавляем точку к треку
-      const currentTrail = issTrail.getLatLngs();
-      currentTrail.push(newPos);
-      if (currentTrail.length > 50) currentTrail.shift(); // Ограничиваем историю
-      issTrail.setLatLngs(currentTrail);
-      
-      // Обновляем графики
-      const now = new Date().toLocaleTimeString();
-      
-      speedChart.data.labels.push(now);
-      speedChart.data.datasets[0].data.push(mockISSData.velocity);
-      if (speedChart.data.labels.length > 20) {
-        speedChart.data.labels.shift();
-        speedChart.data.datasets[0].data.shift();
-      }
-      speedChart.update('none');
-      
-      altChart.data.labels.push(now);
-      altChart.data.datasets[0].data.push(mockISSData.altitude);
-      if (altChart.data.labels.length > 20) {
-        altChart.data.labels.shift();
-        altChart.data.datasets[0].data.shift();
-      }
-      altChart.update('none');
-      
-    } catch (error) {
-      console.error('Ошибка загрузки данных МКС:', error);
+      // Update with fallback data
+      setTimeout(() => {
+        updateMetricCard('iss-speed', fallbackData.velocity, 'км/ч');
+        updateMetricCard('iss-altitude', fallbackData.altitude, 'км');
+        updateMapPanel(fallbackData);
+        updateMapPosition(fallbackData);
+        updateCharts(fallbackData);
+        
+        SpaceApp.showNotification('Загружены резервные данные МКС', 'warning', 3000);
+      }, 500);
     }
   }
   
-  // Загружаем данные сразу и каждые 15 секунд
-  loadISSData();
-  setInterval(loadISSData, 15000);
+  // Simple metric card updates
+  function updateMetricCard(elementId, value, suffix = '') {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = Math.round(value).toLocaleString('ru-RU');
+    }
+  }
   
-  // Обновляем счётчик данных
+  // Update map panel
+  function updateMapPanel(data) {
+    const coords = document.getElementById('map-coords');
+    const velocity = document.getElementById('map-velocity');
+    const altitude = document.getElementById('map-altitude');
+    
+    if (coords) coords.textContent = `${data.latitude.toFixed(2)}, ${data.longitude.toFixed(2)}`;
+    if (velocity) velocity.textContent = `${Math.round(data.velocity).toLocaleString()} км/ч`;
+    if (altitude) altitude.textContent = `${data.altitude.toFixed(1)} км`;
+  }
+  
+  // Update map position  
+  function updateMapPosition(data) {
+    const newPos = [data.latitude, data.longitude];
+    
+    issMarker.setLatLng(newPos);
+    
+    // Add to trail
+    const currentTrail = issTrail.getLatLngs();
+    currentTrail.push(newPos);
+    if (currentTrail.length > 50) currentTrail.shift();
+    issTrail.setLatLngs(currentTrail);
+    
+    // Center map on ISS
+    map.setView(newPos, map.getZoom());
+  }
+  
+  // Enhanced chart updates
+  function updateCharts(data) {
+    const now = new Date().toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
+    
+    // Update speed chart
+    speedChart.data.labels.push(now);
+    speedChart.data.datasets[0].data.push(data.velocity);
+    if (speedChart.data.labels.length > 30) {
+      speedChart.data.labels.shift();
+      speedChart.data.datasets[0].data.shift();
+    }
+    speedChart.update('none');
+    
+    // Update altitude chart
+    altChart.data.labels.push(now);
+    altChart.data.datasets[0].data.push(data.altitude);
+    if (altChart.data.labels.length > 30) {
+      altChart.data.labels.shift();
+      altChart.data.datasets[0].data.shift();
+    }
+    altChart.update('none');
+  }
+  
+  // Global refresh function for button
+  window.refreshISS = function() {
+    loadISSData();
+  };
+  
+  // Simple data points counter
+  function updateDataPoints() {
+    const current = parseInt(document.getElementById('data-points').textContent.replace(/\D/g, '') || '0');
+    const increment = Math.floor(Math.random() * 5 + 1);
+    const newValue = current + increment;
+    updateMetricCard('data-points', newValue);
+  }
+  
+  // Periodic Updates (every minute)
+  loadISSData();
+  setInterval(loadISSData, 60000);
+  
+  // Update data points counter
   document.getElementById('data-points').textContent = Math.floor(Math.random() * 1000 + 500).toLocaleString();
+  setInterval(updateDataPoints, 30000);
+  
+  console.log('🚀 Simple Dashboard loaded');
 });
 </script>
+
+<!-- Fixed Sizing Styles -->
+<style>
+  /* Fixed sizing to prevent infinite growth */
+  .container {
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+  }
+
+  .grid {
+    display: grid;
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow: hidden;
+  }
+
+  #iss-map {
+    width: 100% !important;
+    height: 320px !important;
+    max-width: 100% !important;
+    max-height: 320px !important;
+    overflow: hidden !important;
+  }
+
+  .leaflet-container {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  canvas {
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  /* Prevent content overflow */
+  * {
+    box-sizing: border-box;
+  }
+
+  .chart-container, 
+  #speed-chart, 
+  #altitude-chart {
+    width: 100% !important;
+    height: 80px !important;
+    max-width: 100% !important;
+    max-height: 80px !important;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Navigation Styles */
+  .nav-item {
+    @apply flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-medium relative overflow-hidden;
+    color: var(--text-secondary);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid transparent;
+  }
+
+  .nav-item:hover {
+    color: var(--neon-blue);
+    background: rgba(0, 217, 255, 0.1);
+    border-color: rgba(0, 217, 255, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .nav-item.active {
+    color: var(--neon-blue);
+    background: rgba(0, 217, 255, 0.15);
+    border-color: rgba(0, 217, 255, 0.5);
+    box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+  }
+
+  .nav-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+  }
+
+  .nav-item:hover::before {
+    left: 100%;
+  }
+
+  .nav-icon {
+    font-size: 1.2em;
+    filter: drop-shadow(0 0 3px currentColor);
+  }
+
+  /* Mobile Navigation */
+  .mobile-nav-item {
+    @apply flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium w-full;
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+  }
+
+  .mobile-nav-item:hover {
+    color: var(--neon-blue);
+    background: rgba(0, 217, 255, 0.1);
+    border-color: rgba(0, 217, 255, 0.2);
+  }
+
+  .mobile-nav-item.active {
+    color: var(--neon-blue);
+    background: rgba(0, 217, 255, 0.15);
+    border-color: rgba(0, 217, 255, 0.4);
+  }
+
+  /* Mobile menu animation */
+  .mobile-menu-open #mobile-nav {
+    transform: translateY(0);
+    opacity: 1;
+  }
+
+  .mobile-menu-open .menu-line-1 {
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .mobile-menu-open .menu-line-2 {
+    opacity: 0;
+  }
+
+  .mobile-menu-open .menu-line-3 {
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+</style>
+
+<!-- All JavaScript Libraries -->
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<!-- Space App Core -->
+<script>
+// Advanced Space App Utilities  
+window.SpaceApp = {
+  // Enhanced Health Check
+  async checkHealth() {
+    try {
+      const response = await axios.get('/health');
+      const status = document.getElementById('health-status');
+      const statusText = document.querySelector('#health-status').nextElementSibling;
+      
+      if (response.status === 200) {
+        status.className = 'w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green';
+        statusText.textContent = 'Система онлайн';
+        statusText.className = 'text-sm font-medium text-neon-green';
+      }
+    } catch (error) {
+      const status = document.getElementById('health-status');
+      const statusText = status.nextElementSibling;
+      status.className = 'w-3 h-3 bg-red-500 rounded-full animate-pulse';
+      statusText.textContent = 'Система офлайн';
+      statusText.className = 'text-sm font-medium text-red-400';
+    }
+  },
+  
+  // Enhanced Loading
+  showLoading(elementId, message = 'Загрузка данных...', icon = '⚡') {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.innerHTML = `
+        <div class="loading text-center py-12">
+          <div class="text-4xl mb-4 cosmic-pulse">${icon}</div>
+          <div class="text-lg font-medium text-neon-blue">${message}</div>
+        </div>
+      `;
+    }
+  },
+
+  // Notification System
+  showNotification(message, type = 'info', duration = 5000) {
+    const notification = document.createElement('div');
+    const colors = {
+      success: 'bg-green-600 border-green-500 text-green-100',
+      error: 'bg-red-600 border-red-500 text-red-100',
+      warning: 'bg-yellow-600 border-yellow-500 text-yellow-100',
+      info: 'bg-blue-600 border-blue-500 text-blue-100'
+    };
+    
+    notification.className = `fixed top-24 right-6 z-50 p-4 rounded-lg border backdrop-blur-lg ${colors[type]} animate__animated animate__slideInRight`;
+    notification.innerHTML = `
+      <div class="flex items-center space-x-3">
+        <div class="text-xl">
+          ${type === 'success' ? '✅' : type === 'error' ? '❌' : type === 'warning' ? '⚠️' : 'ℹ️'}
+        </div>
+        <div class="font-medium">${message}</div>
+        <button onclick="this.parentElement.parentElement.remove()" class="ml-2 text-xl hover:opacity-70">✕</button>
+      </div>
+    `;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+      notification.classList.add('animate__slideOutRight');
+      setTimeout(() => notification.remove(), 300);
+    }, duration);
+  }
+};
+</script>
+
+<!-- Custom Effects -->
+<script src="/js/space-effects.js"></script>
+
+<!-- Initialize App -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // Mobile menu functionality
+  const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+  const mobileNav = document.getElementById('mobile-nav');
+  
+  if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener('click', () => {
+      document.body.classList.toggle('mobile-menu-open');
+    });
+  }
+
+  // Update current time
+  function updateTime() {
+    const timeElement = document.getElementById('current-time');
+    if (timeElement) {
+      timeElement.textContent = new Date().toLocaleTimeString('ru-RU', {
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+  }
+  
+  updateTime();
+  setInterval(updateTime, 1000);
+
+  // Enhanced health check
+  SpaceApp.checkHealth();
+  setInterval(SpaceApp.checkHealth, 30000);
+  
+  console.log('🚀 SpaceApp инициализирован');
+});
+</script>
+
+</body>
+</html>

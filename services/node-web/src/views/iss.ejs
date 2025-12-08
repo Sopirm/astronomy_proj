@@ -1,9 +1,89 @@
-<!-- ISS Tracking Page -->
-<% 
-// Подготавливаем данные
-const issData = last?.payload || {};
-const trendData = trend?.points || [];
-%>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= title || 'МКС Трекинг' %></title>
+  
+  <!-- CSS Libraries -->
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom Theme -->
+  <link rel="stylesheet" href="/css/space-theme.css">
+</head>
+
+<body>
+  <!-- Advanced Navigation -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-xl border-b border-neon-blue border-opacity-30">
+    <div class="container mx-auto px-6">
+      <div class="flex items-center justify-between h-20">
+        <!-- Logo & Brand -->
+        <div class="flex items-center space-x-8">
+          <a href="/dashboard" class="group flex items-center space-x-3">
+            <div class="relative">
+              <div class="text-3xl float glow-blue">🚀</div>
+              <div class="absolute inset-0 bg-neon-blue rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity"></div>
+            </div>
+            <div class="text-xl font-bold bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+              Кассиопея
+            </div>
+          </a>
+          
+          <!-- Main Navigation -->
+          <div class="hidden lg:flex items-center space-x-1">
+            <a href="/dashboard" class="nav-item <%= (currentPath === '/dashboard') ? 'active' : '' %>" data-tooltip="Общий обзор системы">
+              <span class="nav-icon">📊</span>
+              <span class="nav-text">Дашборд</span>
+            </a>
+            <a href="/iss" class="nav-item <%= (currentPath === '/iss') ? 'active' : '' %>" data-tooltip="Трекинг МКС">
+              <span class="nav-icon">🛸</span>
+              <span class="nav-text">МКС</span>
+            </a>
+            <a href="/jwst" class="nav-item <%= (currentPath === '/jwst') ? 'active' : '' %>" data-tooltip="Галерея телескопа">
+              <span class="nav-icon">🔭</span>
+              <span class="nav-text">JWST</span>
+            </a>
+            <a href="/osdr" class="nav-item <%= (currentPath === '/osdr') ? 'active' : '' %>" data-tooltip="Космические эксперименты">
+              <span class="nav-icon">🧪</span>
+              <span class="nav-text">OSDR</span>
+            </a>
+            <a href="/astro" class="nav-item <%= (currentPath === '/astro') ? 'active' : '' %>" data-tooltip="Астрономические события">
+              <span class="nav-icon">⭐</span>
+              <span class="nav-text">Астро</span>
+            </a>
+            <a href="/legacy" class="nav-item <%= (currentPath === '/legacy') ? 'active' : '' %>" data-tooltip="Legacy данные">
+              <span class="nav-icon">📈</span>
+              <span class="nav-text">Legacy</span>
+            </a>
+          </div>
+        </div>
+        
+        <!-- Right Side -->
+        <div class="flex items-center space-x-6">
+          <!-- System Status -->
+          <div class="hidden md:flex items-center space-x-3 px-4 py-2 bg-slate-800 bg-opacity-50 rounded-full border border-neon-green border-opacity-30">
+            <div class="flex items-center space-x-2">
+              <div id="health-status" class="w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green"></div>
+              <span class="text-sm font-medium text-neon-green">Система онлайн</span>
+            </div>
+            <div class="w-px h-4 bg-slate-600"></div>
+            <div class="text-xs text-slate-400" id="current-time">
+              <!-- Time will be updated by JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Navigation Spacer -->
+  <div class="h-20"></div>
+
+  <!-- Main Content -->
+  <main class="container mx-auto px-6 py-8">
 
 <div class="animate__animated animate__fadeIn">
   <!-- Header -->
@@ -443,4 +523,96 @@ document.addEventListener('DOMContentLoaded', async () => {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.1); }
 }
+
+/* Navigation Styles */
+.nav-item {
+  @apply flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-medium relative overflow-hidden;
+  color: var(--text-secondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+}
+
+.nav-item:hover {
+  color: var(--neon-blue);
+  background: rgba(0, 217, 255, 0.1);
+  border-color: rgba(0, 217, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.nav-item.active {
+  color: var(--neon-blue);
+  background: rgba(0, 217, 255, 0.15);
+  border-color: rgba(0, 217, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+}
+
+.nav-icon {
+  font-size: 1.2em;
+  filter: drop-shadow(0 0 3px currentColor);
+}
 </style>
+
+  </main>
+
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+  <!-- Custom Effects -->
+  <script src="/js/space-effects.js"></script>
+
+  <script>
+    // Enhanced Space App Utilities (базовая версия)
+    window.SpaceApp = {
+      async checkHealth() {
+        try {
+          const response = await axios.get('/health');
+          const status = document.getElementById('health-status');
+          const statusText = document.querySelector('#health-status').nextElementSibling;
+          
+          if (response.status === 200) {
+            status.className = 'w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green';
+            statusText.textContent = 'Система онлайн';
+            statusText.className = 'text-sm font-medium text-neon-green';
+          }
+        } catch (error) {
+          const status = document.getElementById('health-status');
+          const statusText = status.nextElementSibling;
+          status.className = 'w-3 h-3 bg-red-500 rounded-full animate-pulse';
+          statusText.textContent = 'Система офлайн';
+          statusText.className = 'text-sm font-medium text-red-400';
+        }
+      },
+
+      showNotification(message, type = 'info', duration = 5000) {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+      }
+    };
+
+    // Initialize App
+    document.addEventListener('DOMContentLoaded', () => {
+      // Update current time
+      function updateTime() {
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+          timeElement.textContent = new Date().toLocaleTimeString('ru-RU', {
+            hour: '2-digit',
+            minute: '2-digit'
+          });
+        }
+      }
+      
+      updateTime();
+      setInterval(updateTime, 1000);
+
+      // Health check
+      SpaceApp.checkHealth();
+      setInterval(SpaceApp.checkHealth, 30000);
+
+      console.log('🚀 ISS Page loaded with advanced design');
+    });
+  </script>
+
+</body>
+</html>

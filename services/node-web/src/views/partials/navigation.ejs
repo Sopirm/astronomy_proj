@@ -1,0 +1,111 @@
+<!-- Advanced Navigation -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900 bg-opacity-80 backdrop-filter backdrop-blur-xl border-b border-neon-blue border-opacity-30">
+  <div class="container mx-auto px-6">
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo & Brand -->
+      <div class="flex items-center space-x-8">
+        <a href="/dashboard" class="group flex items-center space-x-3">
+          <div class="relative">
+            <div class="text-3xl float glow-blue">🚀</div>
+            <div class="absolute inset-0 bg-neon-blue rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity"></div>
+          </div>
+          <div class="text-xl font-bold bg-gradient-to-r from-neon-blue to-neon-purple bg-clip-text text-transparent">
+            Кассиопея
+          </div>
+        </a>
+        
+        <!-- Main Navigation -->
+        <div class="hidden lg:flex items-center space-x-1">
+          <a href="/dashboard" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/dashboard') ? 'active' : '' %>" data-tooltip="Общий обзор системы">
+            <span class="nav-icon">📊</span>
+            <span class="nav-text">Дашборд</span>
+          </a>
+          <a href="/iss" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/iss') ? 'active' : '' %>" data-tooltip="Трекинг МКС">
+            <span class="nav-icon">🛸</span>
+            <span class="nav-text">МКС</span>
+          </a>
+          <a href="/jwst" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/jwst') ? 'active' : '' %>" data-tooltip="Галерея телескопа">
+            <span class="nav-icon">🔭</span>
+            <span class="nav-text">JWST</span>
+          </a>
+          <a href="/osdr" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/osdr') ? 'active' : '' %>" data-tooltip="Космические эксперименты">
+            <span class="nav-icon">🧪</span>
+            <span class="nav-text">OSDR</span>
+          </a>
+          <a href="/astro" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/astro') ? 'active' : '' %>" data-tooltip="Астрономические события">
+            <span class="nav-icon">⭐</span>
+            <span class="nav-text">Астро</span>
+          </a>
+          <a href="/legacy" class="nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/legacy') ? 'active' : '' %>" data-tooltip="Legacy данные">
+            <span class="nav-icon">📈</span>
+            <span class="nav-text">Legacy</span>
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right Side -->
+      <div class="flex items-center space-x-6">
+        <!-- System Status -->
+        <div class="hidden md:flex items-center space-x-3 px-4 py-2 bg-slate-800 bg-opacity-50 rounded-full border border-neon-green border-opacity-30">
+          <div class="flex items-center space-x-2">
+            <div id="health-status" class="w-3 h-3 bg-neon-green rounded-full animate-pulse glow-green"></div>
+            <span class="text-sm font-medium text-neon-green">Система онлайн</span>
+          </div>
+          <div class="w-px h-4 bg-slate-600"></div>
+          <div class="text-xs text-slate-400" id="current-time">
+            <!-- Time will be updated by JS -->
+          </div>
+        </div>
+
+        <!-- Settings Button -->
+        <button class="p-3 hover:bg-slate-800 hover:bg-opacity-50 rounded-full transition-all duration-300 group">
+          <div class="text-xl group-hover:rotate-90 transition-transform duration-300">⚙️</div>
+        </button>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-menu-btn" class="lg:hidden p-2 hover:bg-slate-800 hover:bg-opacity-50 rounded-lg transition-all">
+          <div class="w-6 h-6 flex flex-col justify-center items-center space-y-1">
+            <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-1"></div>
+            <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-2"></div>
+            <div class="w-4 h-0.5 bg-neon-blue transition-all menu-line-3"></div>
+          </div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div id="mobile-nav" class="lg:hidden absolute top-full left-0 right-0 bg-slate-900 bg-opacity-95 backdrop-blur-xl border-b border-neon-blue border-opacity-20 transform -translate-y-full opacity-0 transition-all duration-300">
+    <div class="container mx-auto px-6 py-4">
+      <div class="space-y-2">
+        <a href="/dashboard" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/dashboard') ? 'active' : '' %>">
+          <span class="nav-icon">📊</span>
+          <span>Дашборд</span>
+        </a>
+        <a href="/iss" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/iss') ? 'active' : '' %>">
+          <span class="nav-icon">🛸</span>
+          <span>МКС</span>
+        </a>
+        <a href="/jwst" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/jwst') ? 'active' : '' %>">
+          <span class="nav-icon">🔭</span>
+          <span>JWST</span>
+        </a>
+        <a href="/osdr" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/osdr') ? 'active' : '' %>">
+          <span class="nav-icon">🧪</span>
+          <span>OSDR</span>
+        </a>
+        <a href="/astro" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/astro') ? 'active' : '' %>">
+          <span class="nav-icon">⭐</span>
+          <span>Астро</span>
+        </a>
+        <a href="/legacy" class="mobile-nav-item <%= (typeof currentPath !== 'undefined' && currentPath === '/legacy') ? 'active' : '' %>">
+          <span class="nav-icon">📈</span>
+          <span>Legacy</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Navigation Spacer -->
+<div class="h-20"></div>
