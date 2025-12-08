@@ -1,0 +1,102 @@
+<!-- CMS Page Template -->
+<div class="animate__animated animate__fadeIn">
+  <div class="space-card rounded-lg p-8 max-w-4xl mx-auto animate__animated animate__fadeInUp">
+    <!-- Page Header -->
+    <div class="text-center mb-8 pb-6 border-b border-gray-600">
+      <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">
+        📄 CMS Страница
+      </h1>
+      <div class="mt-2 text-gray-400">
+        Slug: <code class="bg-slate-700 px-2 py-1 rounded text-cyan-400"><%= slug %></code>
+      </div>
+    </div>
+
+    <!-- Page Content -->
+    <div class="prose prose-invert max-w-none">
+      <!-- This is a placeholder CMS page -->
+      <div class="bg-blue-600 bg-opacity-10 border border-blue-500 rounded-lg p-6 mb-6">
+        <div class="flex items-center mb-3">
+          <div class="text-blue-400 text-2xl mr-3">ℹ️</div>
+          <h3 class="text-lg font-semibold text-blue-400 m-0">CMS Система</h3>
+        </div>
+        <p class="text-gray-300 m-0">
+          Эта страница предназначена для отображения динамического контента из CMS. 
+          В полной реализации здесь будет отображаться содержимое из базы данных.
+        </p>
+      </div>
+
+      <!-- Sample Content -->
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-white">Пример контента для страницы "<%= slug %>"</h2>
+        
+        <p class="text-gray-300 leading-relaxed">
+          Это демонстрационная CMS страница. В рабочей системе здесь будет отображаться 
+          реальное содержимое, загруженное из базы данных по slug-у страницы.
+        </p>
+
+        <div class="bg-slate-700 bg-opacity-50 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-cyan-400 mb-3">💡 Функциональность CMS</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
+              Динамическое содержимое из БД
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
+              SEO-дружественные URL (slug)
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
+              HTML разметка в контенте
+            </li>
+            <li class="flex items-center">
+              <span class="w-2 h-2 bg-cyan-400 rounded-full mr-3"></span>
+              Управление активностью страниц
+            </li>
+          </ul>
+        </div>
+
+        <!-- Navigation Links -->
+        <div class="bg-gradient-to-r from-purple-600 to-blue-600 bg-opacity-20 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-purple-400 mb-4">🚀 Навигация по системе</h3>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <a href="/dashboard" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-blue-400 text-xl mb-1">📊</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">Дашборд</div>
+            </a>
+            <a href="/iss" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-green-400 text-xl mb-1">🛸</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">МКС</div>
+            </a>
+            <a href="/jwst" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-purple-400 text-xl mb-1">🔭</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">JWST</div>
+            </a>
+            <a href="/osdr" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-cyan-400 text-xl mb-1">🧪</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">OSDR</div>
+            </a>
+            <a href="/astro" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-yellow-400 text-xl mb-1">⭐</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">Астро</div>
+            </a>
+            <a href="/legacy" class="block p-3 bg-slate-700 bg-opacity-50 hover:bg-opacity-70 rounded-lg text-center transition-all group">
+              <div class="text-orange-400 text-xl mb-1">📈</div>
+              <div class="text-sm text-gray-300 group-hover:text-white">Legacy</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="mt-8 pt-6 border-t border-gray-600 text-center">
+      <p class="text-sm text-gray-500">
+        CMS страница для slug: <strong class="text-cyan-400"><%= slug %></strong>
+      </p>
+      <p class="text-xs text-gray-600 mt-1">
+        Проект Кассиопея - Космические данные
+      </p>
+    </div>
+  </div>
+</div>

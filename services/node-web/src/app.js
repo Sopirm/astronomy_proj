@@ -31,19 +31,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// ===== BASIC ROUTES =====
-app.get('/', (req, res) => {
-  res.redirect('/dashboard');
-});
-
-app.get('/dashboard', (req, res) => {
-  res.render('dashboard', {
-    title: 'Космический Дашборд | Кассиопея',
-    message: 'Node.js сервер успешно запущен!'
-  });
-});
-
-// Статус сервера
+// ===== HEALTH CHECK (до основных routes) =====
 app.get('/health', (req, res) => {
   res.json({
     status: 'ok',
@@ -52,6 +40,10 @@ app.get('/health', (req, res) => {
     version: require('../package.json').version
   });
 });
+
+// ===== ROUTES =====
+const routes = require('./routes/index');
+app.use('/', routes);
 
 // ===== ERROR HANDLING =====
 app.use((req, res) => {
