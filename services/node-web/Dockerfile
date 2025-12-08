@@ -26,8 +26,8 @@ FROM node:18-alpine AS production
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nodeuser -u 1001 -G nodejs
 
-# Установка dumb-init для правильной обработки сигналов
-RUN apk add --no-cache dumb-init
+# Установка dumb-init и wget для health check
+RUN apk add --no-cache dumb-init wget
 
 # Рабочая директория
 WORKDIR /app
@@ -49,8 +49,8 @@ USER nodeuser
 EXPOSE 3001
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD node -e "require('http').get('http://localhost:3001/health', (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }).on('error', () => process.exit(1))"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD wget --quiet --tries=1 --spider http://localhost:3001/health || exit 1
 
 # Запуск с dumb-init для правильной обработки сигналов
 ENTRYPOINT ["dumb-init", "--"]

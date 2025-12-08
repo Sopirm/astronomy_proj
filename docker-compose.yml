@@ -121,10 +121,8 @@ services:
     image: nginx:1.27-alpine
     container_name: web_nginx
     depends_on:
-      node_web:
-        condition: service_healthy
-      php:
-        condition: service_healthy
+      - node_web
+      - php
     volumes:
       - appdata:/var/www/html:ro
       - ./services/node-web/nginx.conf:/etc/nginx/conf.d/default.conf:ro
