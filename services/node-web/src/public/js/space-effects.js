@@ -13,69 +13,12 @@ class SpaceEffects {
   }
 
   init() {
-    this.createParticleSystem();
     this.initMouseEffects();
     this.initScrollEffects();
     this.initPageTransitions();
     this.initTypingEffects();
     
     console.log('✨ SpaceEffects инициализированы');
-  }
-
-  // ===== PARTICLE SYSTEM =====
-  createParticleSystem() {
-    if (this.isReducedMotion) return;
-    
-    const particlesContainer = document.createElement('div');
-    particlesContainer.className = 'particles';
-    document.body.appendChild(particlesContainer);
-
-    // Create floating particles
-    for (let i = 0; i < 50; i++) {
-      this.createParticle(particlesContainer);
-    }
-
-    // Continuously spawn new particles
-    setInterval(() => {
-      if (document.visibilityState === 'visible') {
-        this.createParticle(particlesContainer);
-      }
-    }, 2000);
-  }
-
-  createParticle(container) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    
-    // Random properties
-    const size = Math.random() * 3 + 1;
-    const opacity = Math.random() * 0.8 + 0.2;
-    const duration = Math.random() * 15 + 10;
-    const delay = Math.random() * 5;
-    
-    // Random colors from neon palette
-    const colors = ['#00d9ff', '#b084ff', '#00ff88', '#ff0080', '#ffff00'];
-    const color = colors[Math.floor(Math.random() * colors.length)];
-    
-    particle.style.cssText = `
-      left: ${Math.random() * 100}vw;
-      width: ${size}px;
-      height: ${size}px;
-      background: ${color};
-      opacity: ${opacity};
-      animation: float-particle ${duration}s infinite linear;
-      animation-delay: ${delay}s;
-      box-shadow: 0 0 10px ${color};
-    `;
-    
-    container.appendChild(particle);
-    
-    // Remove particle after animation
-    setTimeout(() => {
-      if (particle.parentNode) {
-        particle.parentNode.removeChild(particle);
-      }
-    }, (duration + delay) * 1000);
   }
 
   // ===== MOUSE EFFECTS =====
@@ -291,70 +234,276 @@ class SpaceEffects {
   }
 }
 
-// ===== CSS ANIMATIONS =====
-const additionalCSS = `
-@keyframes page-enter {
-  0% { 
-    opacity: 0; 
-    transform: translateY(20px) scale(0.95);
+// New class to manage dashboard specific logic
+class DashboardManager {
+  constructor(serverIssData) {
+    this.serverIssData = serverIssData;
+    this.map = null;
+    this.issMarker = null;
+    this.issTrail = null;
+    this.speedChart = null;
+    this.altChart = null;
+    this.isFirstLoad = true;
+    
+    this.initDashboard();
+    console.log('🚀 DashboardManager инициализирован');
   }
-  100% { 
-    opacity: 1; 
-    transform: translateY(0) scale(1);
+
+  initDashboard() {
+    // Initialize map
+    this.map = L.map('iss-map', {
+      attributionControl: false,
+      zoomControl: true,
+      preferCanvas: true,
+      trackResize: false
+    }).setView([0, 0], 2);
+    
+    setTimeout(() => {
+      this.map.invalidateSize(false);
+    }, 100);
+    
+    L.tileLayer('https://{s}.tile.openstreetmap.de/{z}/{x}/{y}.png', {
+      attribution: '',
+      noWrap: true
+    }).addTo(this.map);
+    
+    this.issMarker = L.marker([0, 0]).addTo(this.map);
+    this.issTrail = L.polyline([], { 
+      color: '#3b82f6', 
+      weight: 3,
+      opacity: 0.7 
+    }).addTo(this.map);
+
+    // Initialize charts
+    this.speedChart = new Chart(document.getElementById('speed-chart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Скорость',
+          data: [],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.05)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { 
+            display: false,
+            grid: { display: false }
+          },
+          y: { 
+            display: false,
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        },
+        elements: {
+          point: { radius: 0 }
+        },
+        animation: false,
+        interaction: { intersect: false },
+        layout: {
+          padding: 0
+        }
+      }
+    });
+    
+    this.altChart = new Chart(document.getElementById('altitude-chart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Высота',
+          data: [],
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37, 99, 235, 0.05)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.1
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: { 
+            display: false,
+            grid: { display: false }
+          },
+          y: { 
+            display: false,
+            grid: { display: false }
+          }
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: { enabled: false }
+        },
+        elements: {
+          point: { radius: 0 }
+        },
+        animation: false,
+        interaction: { intersect: false },
+        layout: {
+          padding: 0
+        }
+      }
+    });
+
+    // Initial load and periodic updates
+    this.loadISSData();
+    setInterval(() => this.loadISSData(), 60000);
+    document.getElementById('data-points').textContent = Math.floor(Math.random() * 1000 + 500).toLocaleString();
+    setInterval(() => this.updateDataPoints(), 30000);
+
+    // Assign to window for global access
+    window.refreshISS = () => this.loadISSData();
+  }
+
+  async loadISSData() {
+    try {
+      let realISSData;
+      let wasFirstLoad = this.isFirstLoad;
+      
+      if (this.isFirstLoad && typeof this.serverIssData !== 'undefined') {
+        realISSData = {
+          latitude: this.serverIssData.payload?.latitude || 0,
+          longitude: this.serverIssData.payload?.longitude || 0,
+          velocity: this.serverIssData.payload?.velocity || 27600,
+          altitude: this.serverIssData.payload?.altitude || 408
+        };
+        this.isFirstLoad = false;
+        console.log('🚀 Используем серверные данные МКС:', realISSData);
+      } else {
+        SpaceApp.showLoading('iss-speed', 'Обновление...', '🔄');
+        
+        const response = await axios.get('/api/iss/last');
+        const issData = response.data;
+        
+        realISSData = {
+          latitude: issData.payload?.latitude || 0,
+          longitude: issData.payload?.longitude || 0,
+          velocity: issData.payload?.velocity || 27600,
+          altitude: issData.payload?.altitude || 408
+        };
+        console.log('📡 Загружены данные МКС через API:', realISSData);
+      }
+      
+      setTimeout(() => {
+        this.updateMetricCard('iss-speed', realISSData.velocity, 'км/ч');
+        this.updateMetricCard('iss-altitude', realISSData.altitude, 'км');
+        this.updateMapPanel(realISSData);
+        this.updateMapPosition(realISSData);
+        this.updateCharts(realISSData);
+        
+        const message = wasFirstLoad ? 'Реальные данные МКС получены с сервера!' : 'Данные МКС обновлены через API!';
+        SpaceApp.showNotification(message, 'success', 2000);
+      }, 500);
+      
+    } catch (error) {
+      console.error('Ошибка загрузки данных МКС:', error);
+      
+      const fallbackData = {
+        latitude: 51.5074,
+        longitude: -0.1278,
+        velocity: 27600,
+        altitude: 408
+      };
+      
+      setTimeout(() => {
+        this.updateMetricCard('iss-speed', fallbackData.velocity, 'км/ч');
+        this.updateMetricCard('iss-altitude', fallbackData.altitude, 'км');
+        this.updateMapPanel(fallbackData);
+        this.updateMapPosition(fallbackData);
+        this.updateCharts(fallbackData);
+        
+        SpaceApp.showNotification('Загружены резервные данные МКС', 'warning', 3000);
+      }, 500);
+    }
+  }
+
+  updateMetricCard(elementId, value, suffix = '') {
+    const element = document.getElementById(elementId);
+    if (element) {
+      element.textContent = Math.round(value).toLocaleString('ru-RU');
+    }
+  }
+  
+  updateMapPanel(data) {
+    const coords = document.getElementById('map-coords');
+    const velocity = document.getElementById('map-velocity');
+    const altitude = document.getElementById('map-altitude');
+    
+    if (coords) coords.textContent = `${data.latitude.toFixed(2)}, ${data.longitude.toFixed(2)}`;
+    if (velocity) velocity.textContent = `${Math.round(data.velocity).toLocaleString()} км/ч`;
+    if (altitude) altitude.textContent = `${data.altitude.toFixed(1)} км`;
+  }
+  
+  updateMapPosition(data) {
+    const newPos = [data.latitude, data.longitude];
+    
+    this.issMarker.setLatLng(newPos);
+    
+    const currentTrail = this.issTrail.getLatLngs();
+    currentTrail.push(newPos);
+    if (currentTrail.length > 50) currentTrail.shift();
+    this.issTrail.setLatLngs(currentTrail);
+    
+    this.map.setView(newPos, this.map.getZoom());
+  }
+  
+  updateCharts(data) {
+    const now = new Date().toLocaleTimeString('ru-RU', { 
+      hour: '2-digit', 
+      minute: '2-digit', 
+      second: '2-digit' 
+    });
+    
+    this.speedChart.data.labels.push(now);
+    this.speedChart.data.datasets[0].data.push(data.velocity);
+    if (this.speedChart.data.labels.length > 30) {
+      this.speedChart.data.labels.shift();
+      this.speedChart.data.datasets[0].data.shift();
+    }
+    this.speedChart.update('none');
+    
+    this.altChart.data.labels.push(now);
+    this.altChart.data.datasets[0].data.push(data.altitude);
+    if (this.altChart.data.labels.length > 30) {
+      this.altChart.data.labels.shift();
+      this.altChart.data.datasets[0].data.shift();
+    }
+    this.altChart.update('none');
+  }
+
+  updateDataPoints() {
+    const current = parseInt(document.getElementById('data-points').textContent.replace(/\D/g, '') || '0');
+    const increment = Math.floor(Math.random() * 5 + 1);
+    const newValue = current + increment;
+    this.updateMetricCard('data-points', newValue);
   }
 }
-
-@keyframes ripple {
-  0% { transform: scale(0); opacity: 1; }
-  100% { transform: scale(2); opacity: 0; }
-}
-
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  10%, 30%, 50%, 70%, 90% { transform: translateX(-${5}px); }
-  20%, 40%, 60%, 80% { transform: translateX(${5}px); }
-}
-
-@keyframes float-up {
-  0% { 
-    opacity: 1; 
-    transform: translateY(0) scale(1);
-  }
-  100% { 
-    opacity: 0; 
-    transform: translateY(-50px) scale(1.2);
-  }
-}
-
-@keyframes cosmic-pulse {
-  0%, 100% { 
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 0.7;
-    transform: scale(1.1);
-    filter: brightness(1.2);
-  }
-}
-`;
-
-// Add CSS to document
-const style = document.createElement('style');
-style.textContent = additionalCSS;
-document.head.appendChild(style);
 
 // Initialize Space Effects when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  window.spaceEffects = new SpaceEffects();
+  const spaceEffects = new SpaceEffects();
   
-  // Add ripple effect to all buttons
   document.querySelectorAll('button, .btn-cosmic-primary').forEach(button => {
     button.addEventListener('click', (e) => {
       SpaceEffects.createRipple(button, e);
     });
   });
-});
 
-// Export for global use
-window.SpaceEffects = SpaceEffects;
+  const serverIssDataElement = document.getElementById('server-iss-data');
+  const serverIssData = serverIssDataElement ? JSON.parse(serverIssDataElement.textContent) : {};
+  const dashboardManager = new DashboardManager(serverIssData);
+});

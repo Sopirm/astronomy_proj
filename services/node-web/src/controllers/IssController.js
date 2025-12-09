@@ -36,6 +36,26 @@ class IssController {
     }
   }
 
+  async last(req, res) {
+    try {
+      const data = await this.fetchJson(`${this.rustBase}/last`);
+      res.json(data);
+    } catch (error) {
+      console.error('Error in IssController.last:', error);
+      res.status(500).json({ error: 'Failed to fetch last ISS data' });
+    }
+  }
+
+  async trend(req, res) {
+    try {
+      const data = await this.fetchJson(`${this.rustBase}/iss/trend`);
+      res.json(data);
+    } catch (error) {
+      console.error('Error in IssController.trend:', error);
+      res.status(500).json({ error: 'Failed to fetch ISS trend data' });
+    }
+  }
+
   async fetchJson(url) {
     try {
       const response = await axios.get(url, { timeout: 5000 });

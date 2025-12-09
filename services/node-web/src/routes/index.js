@@ -56,8 +56,8 @@ router.get('/astro', (req, res) => {
 // ===== API ЭНДПОИНТЫ (СОВМЕСТИМОСТЬ С LARAVEL) =====
 
 // Прокси к rust_iss API - ТОЧНАЯ совместимость
-router.get('/api/iss/last', (req, res) => proxyController.last(req, res));
-router.get('/api/iss/trend', (req, res) => proxyController.trend(req, res));
+router.get('/api/iss/last', (req, res) => issController.last(req, res));
+router.get('/api/iss/trend', (req, res) => issController.trend(req, res));
 
 // JWST галерея API - ТОЧНАЯ совместимость с Laravel
 router.get('/api/jwst/feed', (req, res) => dashboardController.jwstFeed(req, res));
