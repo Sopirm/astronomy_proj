@@ -1,24 +1,26 @@
+<% layout('layout') %>
+
 <!-- JWST Gallery Page -->
 <div class="animate__animated animate__fadeIn">
   <!-- Header -->
   <div class="text-center mb-8">
-    <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-500">
+    <h1 class="text-4xl font-bold text-gray-900">
       🔭 James Webb Space Telescope
     </h1>
-    <p class="text-gray-400 mt-2">Галерея изображений самого мощного космического телескопа</p>
+    <p class="text-gray-600 mt-2">Галерея изображений самого мощного космического телескопа</p>
   </div>
 
   <!-- Advanced Filters -->
-  <div class="space-card rounded-lg p-6 mb-6 animate__animated animate__fadeInDown">
+  <div class="space-card rounded-lg p-6 mb-6 shadow-sm">
     <form id="jwst-filters" class="space-y-4">
       <div class="flex items-center justify-between">
-        <h3 class="text-lg font-semibold text-purple-400">🎛️ Фильтры и настройки</h3>
+        <h3 class="text-lg font-semibold text-gray-900">🎛️ Фильтры и настройки</h3>
         <div class="flex items-center space-x-3">
-          <div class="text-sm text-gray-400">
-            Показано: <span id="images-count" class="text-purple-400 font-semibold">0</span> изображений
+          <div class="text-sm text-gray-600">
+            Показано: <span id="images-count" class="text-blue-600 font-semibold">0</span> изображений
           </div>
           <button type="button" id="reset-filters-btn" 
-                  class="px-3 py-1 bg-gray-600 bg-opacity-20 hover:bg-opacity-30 border border-gray-500 rounded text-gray-400 text-sm transition-all">
+                  class="px-3 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded text-gray-700 text-sm transition-all">
             🔄 Сброс
           </button>
         </div>
@@ -27,8 +29,8 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Source Type -->
         <div>
-          <label class="block text-sm font-medium text-gray-400 mb-2">Тип источника</label>
-          <select name="source" id="source-select" class="w-full bg-slate-700 border border-gray-600 rounded-lg px-3 py-2 text-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Тип источника</label>
+          <select name="source" id="source-select" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
             <option value="jpg" selected>📸 Все JPG</option>
             <option value="suffix">🏷️ По суффиксу</option>
             <option value="program">🚀 По программе</option>
@@ -37,24 +39,24 @@
 
         <!-- Suffix Filter -->
         <div id="suffix-filter" style="display: none;">
-          <label class="block text-sm font-medium text-gray-400 mb-2">Суффикс</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Суффикс</label>
           <input type="text" name="suffix" id="suffix-input" 
                  placeholder="_cal, _thumb, _crf" 
-                 class="w-full bg-slate-700 border border-gray-600 rounded-lg px-3 py-2 text-sm">
+                 class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
         </div>
 
         <!-- Program Filter -->
         <div id="program-filter" style="display: none;">
-          <label class="block text-sm font-medium text-gray-400 mb-2">ID программы</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">ID программы</label>
           <input type="text" name="program" id="program-input" 
                  placeholder="2734, 1345" 
-                 class="w-full bg-slate-700 border border-gray-600 rounded-lg px-3 py-2 text-sm">
+                 class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
         </div>
 
         <!-- Instrument Filter -->
         <div>
-          <label class="block text-sm font-medium text-gray-400 mb-2">Инструмент</label>
-          <select name="instrument" class="w-full bg-slate-700 border border-gray-600 rounded-lg px-3 py-2 text-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Инструмент</label>
+          <select name="instrument" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
             <option value="">🔭 Любой инструмент</option>
             <option value="NIRCam">📷 NIRCam</option>
             <option value="MIRI">🌡️ MIRI</option>
@@ -66,8 +68,8 @@
 
         <!-- Items per page -->
         <div>
-          <label class="block text-sm font-medium text-gray-400 mb-2">На странице</label>
-          <select name="perPage" class="w-full bg-slate-700 border border-gray-600 rounded-lg px-3 py-2 text-sm">
+          <label class="block text-sm font-medium text-gray-700 mb-2">На странице</label>
+          <select name="perPage" class="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900">
             <option value="12">12 изображений</option>
             <option value="24" selected>24 изображения</option>
             <option value="36">36 изображений</option>
@@ -77,30 +79,30 @@
       </div>
 
       <!-- Action Buttons -->
-      <div class="flex items-center justify-between pt-4 border-t border-gray-600">
+      <div class="flex items-center justify-between pt-4 border-t border-gray-300">
         <div class="flex items-center space-x-3">
           <button type="submit" 
-                  class="px-6 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg transition-colors">
+                  class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors">
             🔍 Применить фильтры
           </button>
           
           <button type="button" id="random-images-btn"
-                  class="px-4 py-2 bg-pink-600 bg-opacity-20 hover:bg-opacity-30 border border-pink-500 rounded-lg text-pink-400 transition-all">
+                  class="px-4 py-2 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded-lg text-blue-700 transition-all">
             🎲 Случайные
           </button>
         </div>
 
         <!-- View Options -->
         <div class="flex items-center space-x-3">
-          <span class="text-sm text-gray-400">Вид:</span>
-          <div class="flex bg-slate-700 rounded-lg p-1">
-            <button type="button" id="grid-view" class="px-3 py-1 rounded text-sm bg-purple-600 text-white transition-all">
+          <span class="text-sm text-gray-700">Вид:</span>
+          <div class="flex bg-gray-100 rounded-lg p-1">
+            <button type="button" id="grid-view" class="px-3 py-1 rounded text-sm bg-blue-600 text-white transition-all">
               🔲 Сетка
             </button>
-            <button type="button" id="list-view" class="px-3 py-1 rounded text-sm text-gray-400 hover:text-white transition-all">
+            <button type="button" id="list-view" class="px-3 py-1 rounded text-sm text-gray-700 hover:text-gray-900 transition-all">
               📋 Список
             </button>
-            <button type="button" id="slideshow-view" class="px-3 py-1 rounded text-sm text-gray-400 hover:text-white transition-all">
+            <button type="button" id="slideshow-view" class="px-3 py-1 rounded text-sm text-gray-700 hover:text-gray-900 transition-all">
               🎬 Слайдшоу
             </button>
           </div>
@@ -111,14 +113,29 @@
 
   <!-- Loading State -->
   <div id="loading-state" class="text-center py-12 space-card rounded-lg">
-    <div class="loading text-purple-400 text-4xl mb-4">🔭</div>
-    <h3 class="text-lg font-semibold text-gray-400">Загрузка изображений JWST...</h3>
-    <p class="text-gray-500 mt-2">Получаем данные от телескопа</p>
+    <div class="loading text-blue-600 text-4xl mb-4">🔭</div>
+    <h3 class="text-lg font-semibold text-gray-900">Загрузка изображений JWST...</h3>
+    <p class="text-gray-600 mt-2">Получаем данные от телескопа</p>
   </div>
 
   <!-- Grid View -->
   <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" style="display: none;">
-    <!-- Images will be loaded here -->
+    <!-- Image Card Template - Will be dynamically populated -->
+    <div class="space-card rounded-lg overflow-hidden cursor-pointer" onclick="openFullscreen(0)">
+      <div class="aspect-square overflow-hidden">
+        <img src="https://jwst-api-cdn.nyc3.cdn.digitaloceanspaces.com/jwst--jw02731001002_02105_00003_nrcalong_o001_crf_thumb.jpg" alt="jw02731001002_02105_00003_nrcalong_o001 · P2731 · _thumb · FGS/NIRCAM/NIRISS/NIRSPEC/MIRI" class="w-full h-full object-cover" loading="lazy">
+      </div>
+      <div class="p-4">
+        <h4 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2">
+          jw02731001002_02105_00003_nrcalong_o001
+        </h4>
+        <div class="text-xs text-gray-600 space-y-1">
+          <div>Program: 2731</div>
+          <div>Instruments: FGS, NIRCAM, NIRISS, NIRSPEC, MIRI</div>
+          <div>Suffix: _thumb</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- List View -->
@@ -132,20 +149,20 @@
       <div class="relative">
         <img id="slideshow-image" class="mx-auto rounded-lg max-h-96 object-contain" alt="JWST Image">
         <div class="absolute inset-0 flex items-center justify-between p-4">
-          <button id="prev-slide" class="p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
+          <button id="prev-slide" class="p-2 bg-gray-700 bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
             ‹
           </button>
-          <button id="next-slide" class="p-2 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
+          <button id="next-slide" class="p-2 bg-gray-700 bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
             ›
           </button>
         </div>
       </div>
-      <div id="slideshow-caption" class="mt-4 text-lg font-semibold text-purple-400"></div>
+      <div id="slideshow-caption" class="mt-4 text-lg font-semibold text-gray-900"></div>
       <div id="slideshow-controls" class="mt-4 flex items-center justify-center space-x-4">
-        <button id="play-pause" class="px-4 py-2 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 border border-purple-500 rounded text-purple-400">
+        <button id="play-pause" class="px-4 py-2 bg-blue-100 bg-opacity-50 hover:bg-blue-200 border border-blue-300 rounded text-blue-700">
           ▶️ Воспроизвести
         </button>
-        <span class="text-gray-400">
+        <span class="text-gray-600">
           <span id="current-slide">1</span> / <span id="total-slides">0</span>
         </span>
       </div>
@@ -154,10 +171,10 @@
 
   <!-- Empty State -->
   <div id="empty-state" class="text-center py-12 space-card rounded-lg" style="display: none;">
-    <div class="text-6xl mb-4">🔭</div>
-    <h3 class="text-xl font-semibold text-gray-400 mb-2">Изображения не найдены</h3>
-    <p class="text-gray-500">Попробуйте изменить параметры фильтров</p>
-    <button class="mt-4 px-4 py-2 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 border border-purple-500 rounded text-purple-400 transition-all"
+    <div class="text-6xl mb-4 text-gray-500">🔭</div>
+    <h3 class="text-xl font-semibold text-gray-900 mb-2">Изображения не найдены</h3>
+    <p class="text-gray-600">Попробуйте изменить параметры фильтров</p>
+    <button class="mt-4 px-4 py-2 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded text-blue-700 transition-all"
             onclick="resetFilters()">
       🔄 Сбросить фильтры
     </button>
@@ -165,13 +182,13 @@
 
   <!-- Pagination -->
   <div id="pagination" class="flex items-center justify-center space-x-2 mt-8" style="display: none;">
-    <button id="prev-page" class="px-4 py-2 bg-slate-700 border border-gray-600 rounded text-gray-400 hover:text-white disabled:opacity-50">
+    <button id="prev-page" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded text-gray-700 hover:text-gray-900 disabled:opacity-50">
       ← Предыдущая
     </button>
-    <div id="page-info" class="px-4 py-2 text-gray-400">
+    <div id="page-info" class="px-4 py-2 text-gray-700">
       Страница <span id="current-page">1</span> из <span id="total-pages">1</span>
     </div>
-    <button id="next-page" class="px-4 py-2 bg-slate-700 border border-gray-600 rounded text-gray-400 hover:text-white disabled:opacity-50">
+    <button id="next-page" class="px-4 py-2 bg-gray-100 border border-gray-300 rounded text-gray-700 hover:text-gray-900 disabled:opacity-50">
       Следующая →
     </button>
   </div>
@@ -183,25 +200,25 @@
     <img id="fullscreen-image" class="max-w-full max-h-full object-contain rounded-lg">
     
     <!-- Navigation -->
-    <button id="fs-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
+    <button id="fs-prev" class="absolute left-4 top-1/2 transform -translate-y-1/2 p-3 bg-gray-700 bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
       ‹
     </button>
-    <button id="fs-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
+    <button id="fs-next" class="absolute right-4 top-1/2 transform -translate-y-1/2 p-3 bg-gray-700 bg-opacity-50 rounded-full text-white hover:bg-opacity-75">
       ›
     </button>
     
     <!-- Close Button -->
-    <button id="fs-close" class="absolute top-4 right-4 p-3 bg-black bg-opacity-50 rounded-full text-white hover:bg-opacity-75 text-2xl">
+    <button id="fs-close" class="absolute top-4 right-4 p-3 bg-gray-700 bg-opacity-50 rounded-full text-white hover:bg-opacity-75 text-2xl">
       ✕
     </button>
     
     <!-- Image Info -->
-    <div class="absolute bottom-4 left-4 right-4 bg-black bg-opacity-50 rounded-lg p-4 text-white">
-      <h4 id="fs-title" class="font-semibold text-lg mb-2"></h4>
+    <div class="absolute bottom-4 left-4 right-4 bg-gray-800 bg-opacity-70 rounded-lg p-4 text-white">
+      <h4 id="fs-title" class="font-semibold text-lg mb-2 text-gray-100"></h4>
       <div class="flex items-center justify-between text-sm text-gray-300">
         <span id="fs-details"></span>
         <div class="space-x-2">
-          <button id="fs-download" class="px-3 py-1 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 rounded text-purple-400">
+          <button id="fs-download" class="px-3 py-1 bg-blue-600 bg-opacity-20 hover:bg-opacity-30 rounded text-blue-400">
             📥 Скачать
           </button>
           <button id="fs-share" class="px-3 py-1 bg-blue-600 bg-opacity-20 hover:bg-opacity-30 rounded text-blue-400">
@@ -213,314 +230,8 @@
   </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🔭 JWST Page инициализирована');
+<!-- All JavaScript Libraries -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
 
-  // State
-  let currentImages = [];
-  let currentView = 'grid';
-  let currentPage = 1;
-  let slideshowTimer = null;
-  let slideshowIndex = 0;
-  let isPlaying = false;
-
-  // Elements
-  const form = document.getElementById('jwst-filters');
-  const sourceSelect = document.getElementById('source-select');
-  const suffixFilter = document.getElementById('suffix-filter');
-  const programFilter = document.getElementById('program-filter');
-  const loadingState = document.getElementById('loading-state');
-  const galleryGrid = document.getElementById('gallery-grid');
-  const galleryList = document.getElementById('gallery-list');
-  const slideshowContainer = document.getElementById('slideshow-container');
-  const emptyState = document.getElementById('empty-state');
-
-  // Toggle filter inputs based on source type
-  sourceSelect.addEventListener('change', () => {
-    const value = sourceSelect.value;
-    suffixFilter.style.display = value === 'suffix' ? 'block' : 'none';
-    programFilter.style.display = value === 'program' ? 'block' : 'none';
-  });
-
-  // Load images function
-  async function loadImages(params = {}) {
-    showLoading();
-    
-    try {
-      const formData = new FormData(form);
-      const queryParams = new URLSearchParams();
-      
-      for (const [key, value] of formData.entries()) {
-        if (value) queryParams.append(key, value);
-      }
-      
-      // Add custom params
-      Object.entries(params).forEach(([key, value]) => {
-        if (value) queryParams.set(key, value);
-      });
-
-      const response = await fetch(`/api/jwst/feed?${queryParams.toString()}`);
-      const data = await response.json();
-      
-      currentImages = data.items || [];
-      
-      document.getElementById('images-count').textContent = currentImages.length;
-      
-      if (currentImages.length === 0) {
-        showEmpty();
-      } else {
-        renderCurrentView();
-      }
-      
-    } catch (error) {
-      console.error('Ошибка загрузки JWST изображений:', error);
-      showEmpty();
-    }
-  }
-
-  function showLoading() {
-    loadingState.style.display = 'block';
-    galleryGrid.style.display = 'none';
-    galleryList.style.display = 'none';
-    slideshowContainer.style.display = 'none';
-    emptyState.style.display = 'none';
-  }
-
-  function showEmpty() {
-    loadingState.style.display = 'none';
-    galleryGrid.style.display = 'none';
-    galleryList.style.display = 'none';
-    slideshowContainer.style.display = 'none';
-    emptyState.style.display = 'block';
-  }
-
-  function renderCurrentView() {
-    loadingState.style.display = 'none';
-    emptyState.style.display = 'none';
-    
-    if (currentView === 'grid') {
-      renderGrid();
-    } else if (currentView === 'list') {
-      renderList();
-    } else if (currentView === 'slideshow') {
-      renderSlideshow();
-    }
-  }
-
-  function renderGrid() {
-    galleryGrid.style.display = 'grid';
-    galleryList.style.display = 'none';
-    slideshowContainer.style.display = 'none';
-    
-    galleryGrid.innerHTML = currentImages.map((item, index) => `
-      <div class="space-card rounded-lg overflow-hidden animate__animated animate__fadeInUp hover:scale-105 transition-transform cursor-pointer"
-           style="animation-delay: ${index * 0.05}s"
-           onclick="openFullscreen(${index})">
-        <div class="aspect-square overflow-hidden">
-          <img src="${item.url}" 
-               alt="${item.caption}"
-               class="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
-               loading="lazy">
-        </div>
-        <div class="p-4">
-          <h4 class="text-sm font-semibold text-purple-400 mb-2 line-clamp-2">
-            ${item.obs || 'JWST Image'}
-          </h4>
-          <div class="text-xs text-gray-400 space-y-1">
-            ${item.program ? `<div>Program: ${item.program}</div>` : ''}
-            ${item.inst.length ? `<div>Instruments: ${item.inst.join(', ')}</div>` : ''}
-            ${item.suffix ? `<div>Suffix: ${item.suffix}</div>` : ''}
-          </div>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderList() {
-    galleryGrid.style.display = 'none';
-    galleryList.style.display = 'block';
-    slideshowContainer.style.display = 'none';
-    
-    galleryList.innerHTML = currentImages.map((item, index) => `
-      <div class="space-card rounded-lg p-4 flex items-center space-x-4 animate__animated animate__fadeInUp hover:bg-opacity-80 transition-all cursor-pointer"
-           style="animation-delay: ${index * 0.02}s"
-           onclick="openFullscreen(${index})">
-        <img src="${item.url}" 
-             alt="${item.caption}"
-             class="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-             loading="lazy">
-        <div class="flex-1">
-          <h4 class="text-lg font-semibold text-purple-400 mb-1">
-            ${item.obs || 'JWST Image'}
-          </h4>
-          <div class="text-sm text-gray-400 space-y-1">
-            ${item.program ? `<div>Program: ${item.program}</div>` : ''}
-            ${item.inst.length ? `<div>Instruments: ${item.inst.join(', ')}</div>` : ''}
-            ${item.suffix ? `<div>Suffix: ${item.suffix}</div>` : ''}
-          </div>
-        </div>
-        <div class="flex-shrink-0">
-          <button class="px-3 py-2 bg-purple-600 bg-opacity-20 hover:bg-opacity-30 border border-purple-500 rounded text-purple-400 transition-all">
-            👁️ Просмотр
-          </button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function renderSlideshow() {
-    if (currentImages.length === 0) return;
-    
-    galleryGrid.style.display = 'none';
-    galleryList.style.display = 'none';
-    slideshowContainer.style.display = 'block';
-    
-    slideshowIndex = 0;
-    updateSlideshow();
-    
-    document.getElementById('total-slides').textContent = currentImages.length;
-  }
-
-  function updateSlideshow() {
-    if (currentImages.length === 0) return;
-    
-    const image = currentImages[slideshowIndex];
-    document.getElementById('slideshow-image').src = image.url;
-    document.getElementById('slideshow-caption').textContent = image.caption || image.obs || 'JWST Image';
-    document.getElementById('current-slide').textContent = slideshowIndex + 1;
-  }
-
-  // View switching
-  document.getElementById('grid-view').addEventListener('click', () => switchView('grid'));
-  document.getElementById('list-view').addEventListener('click', () => switchView('list'));
-  document.getElementById('slideshow-view').addEventListener('click', () => switchView('slideshow'));
-
-  function switchView(view) {
-    currentView = view;
-    
-    // Update button states
-    document.querySelectorAll('[id$="-view"]').forEach(btn => {
-      btn.classList.remove('bg-purple-600', 'text-white');
-      btn.classList.add('text-gray-400');
-    });
-    
-    document.getElementById(view + '-view').classList.add('bg-purple-600', 'text-white');
-    document.getElementById(view + '-view').classList.remove('text-gray-400');
-    
-    renderCurrentView();
-  }
-
-  // Form submission
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    loadImages();
-  });
-
-  // Reset filters
-  document.getElementById('reset-filters-btn').addEventListener('click', () => {
-    form.reset();
-    sourceSelect.dispatchEvent(new Event('change'));
-    loadImages();
-  });
-
-  // Random images
-  document.getElementById('random-images-btn').addEventListener('click', () => {
-    loadImages({ source: 'jpg', perPage: 24, page: Math.floor(Math.random() * 10) + 1 });
-  });
-
-  // Slideshow controls
-  document.getElementById('prev-slide').addEventListener('click', () => {
-    slideshowIndex = (slideshowIndex - 1 + currentImages.length) % currentImages.length;
-    updateSlideshow();
-  });
-
-  document.getElementById('next-slide').addEventListener('click', () => {
-    slideshowIndex = (slideshowIndex + 1) % currentImages.length;
-    updateSlideshow();
-  });
-
-  document.getElementById('play-pause').addEventListener('click', () => {
-    if (isPlaying) {
-      clearInterval(slideshowTimer);
-      document.getElementById('play-pause').innerHTML = '▶️ Воспроизвести';
-    } else {
-      slideshowTimer = setInterval(() => {
-        slideshowIndex = (slideshowIndex + 1) % currentImages.length;
-        updateSlideshow();
-      }, 3000);
-      document.getElementById('play-pause').innerHTML = '⏸️ Пауза';
-    }
-    isPlaying = !isPlaying;
-  });
-
-  // Fullscreen modal
-  window.openFullscreen = function(index) {
-    const modal = document.getElementById('fullscreen-modal');
-    const image = currentImages[index];
-    
-    document.getElementById('fullscreen-image').src = image.url;
-    document.getElementById('fs-title').textContent = image.obs || 'JWST Image';
-    document.getElementById('fs-details').textContent = image.caption || '';
-    
-    modal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    
-    // Store current index for navigation
-    modal.dataset.currentIndex = index;
-  };
-
-  document.getElementById('fs-close').addEventListener('click', () => {
-    const modal = document.getElementById('fullscreen-modal');
-    modal.style.display = 'none';
-    document.body.style.overflow = 'auto';
-  });
-
-  // Download functionality
-  document.getElementById('fs-download').addEventListener('click', () => {
-    const modal = document.getElementById('fullscreen-modal');
-    const index = parseInt(modal.dataset.currentIndex);
-    const image = currentImages[index];
-    
-    const a = document.createElement('a');
-    a.href = image.url;
-    a.download = `jwst_${image.obs || 'image'}.jpg`;
-    a.click();
-  });
-
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    const modal = document.getElementById('fullscreen-modal');
-    if (modal.style.display === 'flex') {
-      if (e.key === 'Escape') {
-        document.getElementById('fs-close').click();
-      } else if (e.key === 'ArrowLeft') {
-        // Previous image
-      } else if (e.key === 'ArrowRight') {
-        // Next image
-      }
-    }
-  });
-
-  // Global reset function
-  window.resetFilters = function() {
-    document.getElementById('reset-filters-btn').click();
-  };
-
-  // Initial load
-  loadImages();
-});
-</script>
-
-<style>
-.aspect-square {
-  aspect-ratio: 1 / 1;
-}
-
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
+<!-- JWST Gallery Logic -->
+<script src="/js/jwst-gallery.js" defer></script>

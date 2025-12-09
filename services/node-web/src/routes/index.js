@@ -33,7 +33,8 @@ router.get('/osdr', (req, res) => osdrController.index(req, res));
 router.get('/jwst', (req, res) => {
   res.render('jwst', {
     title: 'JWST - Галерея изображений | Кассиопея',
-    currentPath: req.path
+    currentPath: req.path,
+    layout: 'layout' // Explicitly specify the layout
   });
 });
 

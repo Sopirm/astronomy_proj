@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const compression = require('compression');
+const engine = require('ejs-mate'); // Make sure ejs-mate is required
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -19,6 +20,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // ===== VIEW ENGINE =====
+app.engine('ejs', engine); // Make sure ejs-mate is set as the engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 

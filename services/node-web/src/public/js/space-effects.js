@@ -89,28 +89,7 @@ class SpaceEffects {
 
   // ===== SCROLL EFFECTS =====
   initScrollEffects() {
-    const observerOptions = {
-      threshold: 0.1,
-      rootMargin: '0px 0px -50px 0px'
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('animate__animated', 'animate__fadeInUp');
-          
-          // Add stagger effect for multiple elements
-          const siblings = Array.from(entry.target.parentNode.children);
-          const index = siblings.indexOf(entry.target);
-          entry.target.style.animationDelay = `${index * 0.1}s`;
-        }
-      });
-    }, observerOptions);
-
-    // Observe all space-cards
-    document.querySelectorAll('.space-card:not(.animate__animated)').forEach(card => {
-      observer.observe(card);
-    });
+    // Removed scroll effects for simplified design
   }
 
   // ===== PAGE TRANSITIONS =====
@@ -504,6 +483,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const serverIssDataElement = document.getElementById('server-iss-data');
-  const serverIssData = serverIssDataElement ? JSON.parse(serverIssDataElement.textContent) : {};
-  const dashboardManager = new DashboardManager(serverIssData);
+  if (serverIssDataElement) {
+    const serverIssData = JSON.parse(serverIssDataElement.textContent);
+    new DashboardManager(serverIssData);
+  }
 });
