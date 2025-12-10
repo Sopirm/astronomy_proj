@@ -42,7 +42,8 @@ router.get('/jwst', (req, res) => {
 router.get('/legacy', (req, res) => {
   res.render('legacy', {
     title: 'Legacy - CSV данные Pascal | Кассиопея', 
-    currentPath: req.path
+    currentPath: req.path,
+    layout: 'layout' // Explicitly specify the layout
   });
 });
 
@@ -50,7 +51,8 @@ router.get('/legacy', (req, res) => {
 router.get('/astro', (req, res) => {
   res.render('astro', {
     title: 'Астрономические события | Кассиопея',
-    currentPath: req.path
+    currentPath: req.path,
+    layout: 'layout' // Explicitly specify the layout
   });
 });
 
