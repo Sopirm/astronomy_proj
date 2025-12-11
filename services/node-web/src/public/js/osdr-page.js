@@ -2,7 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('🧪 OSDR Page инициализирована');
 
   // Данные экспериментов
-  const allItems = <%- JSON.stringify(items) %>;
+  const serverItemsElement = document.getElementById('server-osdr-items');
+  const allItems = JSON.parse(serverItemsElement.textContent);
   let filteredItems = [...allItems];
   let currentView = 'cards';
 
@@ -93,7 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function renderCards() {
     const grid = document.getElementById('experiments-grid');
     grid.innerHTML = filteredItems.map((item, index) => `
-      <div class="experiment-card space-card rounded-lg p-5 cursor-pointer"
+      <div class="experiment-card space-card rounded-lg p-5"
            onclick="viewDetails('${item.id}')">
         <div class="flex items-start justify-between mb-4">
           <div class="flex-1">
@@ -101,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ${item.title || `Эксперимент ${item.dataset_id || item.id}`}
             </h4>
             <div class="text-sm text-gray-600">
-              ID: <span class="font-mono text-gray-900">${item.dataset_id || item.id}</span>
+              ID: <span class="text-gray-800 font-mono">${item.dataset_id || item.id}</span>
             </div>
           </div>
           ${item.status ? `
@@ -114,13 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
           ${item.updated_at ? `
             <div class="flex justify-between">
               <span class="text-gray-600">Обновлено:</span>
-              <span class="text-gray-900">${new Date(item.updated_at).toLocaleDateString('ru-RU')}</span>
+              <span class="text-gray-800">${new Date(item.updated_at).toLocaleDateString('ru-RU')}</span>
             </div>
           ` : ''}
           ${item.rest_url ? `
             <div class="flex justify-between">
               <span class="text-gray-600">API:</span>
-              <a href="${item.rest_url}" target="_blank" class="text-blue-600 hover:text-blue-700 text-xs font-mono transition-colors">
+              <a href="${item.rest_url}" target="_blank" class="text-blue-600 hover:text-blue-800 text-xs font-mono transition-colors">
                 🔗 REST API
               </a>
             </div>
@@ -135,10 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tbody.innerHTML = filteredItems.map(item => `
       <tr class="border-b border-gray-200 hover:bg-gray-100 experiment-row">
         <td class="py-3 px-3">
-          <span class="font-mono text-blue-600">${item.dataset_id || item.id}</span>
+          <span class="font-mono text-gray-800">${item.dataset_id || item.id}</span>
         </td>
         <td class="py-3 px-3">
-          <div class="font-medium text-gray-900">${item.title || `Эксперимент ${item.dataset_id || item.id}`}</div>
+          <div class="font-medium text-gray-900 truncate">${item.title || `Эксперимент ${item.dataset_id || item.id}`}</div>
         </td>
         <td class="py-3 px-3">
           ${item.status ? `
@@ -150,7 +151,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </td>
         <td class="py-3 px-3">
           <div class="flex space-x-1">
-            <button class="px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded text-blue-700 text-xs"
+            <button class="px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded text-blue-700 text-xs transition-colors"
                     onclick="viewDetails('${item.id}')">👁️ Подробно</button>
             ${item.rest_url ? `
               <button class="px-2 py-1 bg-blue-100 hover:bg-blue-200 rounded text-blue-700 text-xs"
@@ -184,18 +185,18 @@ document.addEventListener('DOMContentLoaded', () => {
   viewCards.addEventListener('click', () => {
     currentView = 'cards';
     viewCards.classList.add('bg-blue-600', 'text-white');
-    viewCards.classList.remove('text-gray-700');
+    viewCards.classList.remove('text-gray-700', 'hover:text-gray-900');
     viewTable.classList.remove('bg-blue-600', 'text-white');
-    viewTable.classList.add('text-gray-700');
+    viewTable.classList.add('text-gray-700', 'hover:text-gray-900');
     renderItems();
   });
 
   viewTable.addEventListener('click', () => {
     currentView = 'table';
     viewTable.classList.add('bg-blue-600', 'text-white');
-    viewTable.classList.remove('text-gray-700');
+    viewTable.classList.remove('text-gray-700', 'hover:text-gray-900');
     viewCards.classList.remove('bg-blue-600', 'text-white');
-    viewCards.classList.add('text-gray-700');
+    viewCards.classList.add('text-gray-700', 'hover:text-gray-900');
     renderItems();
   });
 
@@ -220,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
         item.inserted_at || '',
         item.rest_url || ''
       ])
-    ].map(row => row.map(field => `"${field}"`).join(',')).join('\n');
+    ].map(row => row.map(field => `\"${field}\"`).join(',')).join('\n');
     
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -243,20 +244,20 @@ document.addEventListener('DOMContentLoaded', () => {
       <div class="space-y-4">
         <h4 class="text-lg font-semibold text-gray-900">${item.title || `Эксперимент ${item.dataset_id || item.id}`}</h4>
         <div class="grid grid-cols-2 gap-4 text-sm">
-          <div><span class="text-gray-600">ID:</span> <span class="text-gray-900 font-mono">${item.id}</span></div>
-          <div><span class="text-gray-600">Dataset ID:</span> <span class="text-gray-900 font-mono">${item.dataset_id || '—'}</span></div>
+          <div><span class="text-gray-600">ID:</span> <span class="text-gray-800 font-mono">${item.id}</span></div>
+          <div><span class="text-gray-600">Dataset ID:</span> <span class="text-gray-800 font-mono">${item.dataset_id || '—'}</span></div>
           <div><span class="text-gray-600">Статус:</span> ${item.status ? `<span class="${getStatusClass(item.status)} px-2 py-1 rounded">${item.status}</span>` : '—'}</div>
-          <div><span class="text-gray-600">Обновлено:</span> <span class="text-gray-900">${item.updated_at ? new Date(item.updated_at).toLocaleString('ru-RU') : '—'}</span></div>
+          <div><span class="text-gray-600">Обновлено:</span> <span class="text-gray-800">${item.updated_at ? new Date(item.updated_at).toLocaleString('ru-RU') : '—'}</span></div>
         </div>
         ${item.rest_url ? `
-          <div class="pt-4 border-t border-gray-300">
-            <a href="${item.rest_url}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded text-blue-700 transition-all">
+          <div class="pt-4 border-t border-gray-200">
+            <a href="${item.rest_url}" target="_blank" class="inline-flex items-center px-4 py-2 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded text-blue-700 transition-colors">
               🔗 Открыть REST API
             </a>
           </div>
         ` : ''}
         ${item.raw ? `
-          <details class="pt-4 border-t border-gray-300">
+          <details class="pt-4 border-t border-gray-200">
             <summary class="cursor-pointer text-gray-600 hover:text-gray-900">🔍 Сырые данные</summary>
             <pre class="mt-2 p-3 bg-gray-100 rounded text-xs overflow-auto max-h-40 text-gray-900">${JSON.stringify(item.raw, null, 2)}</pre>
           </details>
