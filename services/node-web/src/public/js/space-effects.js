@@ -58,26 +58,6 @@ class SpaceEffects {
       }, 100);
     });
 
-    // Parallax effect for cards
-    document.addEventListener('mousemove', (e) => {
-      const cards = document.querySelectorAll('.space-card, .metric-card');
-      
-      cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const x = (e.clientX - rect.left - rect.width / 2) / rect.width;
-        const y = (e.clientY - rect.top - rect.height / 2) / rect.height;
-        
-        if (Math.abs(x) < 1 && Math.abs(y) < 1) {
-          card.style.transform = `
-            perspective(1000px)
-            rotateX(${y * 5}deg)
-            rotateY(${x * 5}deg)
-            translateZ(10px)
-          `;
-        }
-      });
-    });
-
     // Reset transform on mouse leave
     document.addEventListener('mouseleave', () => {
       const cards = document.querySelectorAll('.space-card, .metric-card');
@@ -94,123 +74,16 @@ class SpaceEffects {
 
   // ===== PAGE TRANSITIONS =====
   initPageTransitions() {
-    const links = document.querySelectorAll('a[href^="/"]');
-    
-    links.forEach(link => {
-      link.addEventListener('click', (e) => {
-        if (link.href === window.location.href) return;
-        
-        // Add transition effect
-        document.body.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        document.body.style.opacity = '0.7';
-        document.body.style.transform = 'scale(0.98)';
-        
-        // Show loading notification
-        SpaceApp.showNotification('Переход между страницами...', 'info', 1000);
-        
-        setTimeout(() => {
-          document.body.style.opacity = '1';
-          document.body.style.transform = 'scale(1)';
-        }, 300);
-      });
-    });
-
-    // Page load animation
-    window.addEventListener('load', () => {
-      document.body.style.animation = 'page-enter 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
-    });
+    /* Эффекты переходов страниц удалены */
   }
 
   // ===== TYPING EFFECTS =====
   initTypingEffects() {
-    const typeElements = document.querySelectorAll('[data-type]');
-    
-    typeElements.forEach(element => {
-      const text = element.textContent;
-      const speed = parseInt(element.dataset.typeSpeed) || 50;
-      
-      element.textContent = '';
-      
-      let i = 0;
-      const typeTimer = setInterval(() => {
-        element.textContent += text.charAt(i);
-        i++;
-        
-        if (i >= text.length) {
-          clearInterval(typeTimer);
-        }
-      }, speed);
-    });
+    /* Эффекты ввода текста удалены */
   }
 
   // ===== UTILITY METHODS =====
-  
-  // Create ripple effect
-  static createRipple(element, event) {
-    const rect = element.getBoundingClientRect();
-    const size = Math.max(rect.width, rect.height);
-    const x = event.clientX - rect.left - size / 2;
-    const y = event.clientY - rect.top - size / 2;
-    
-    const ripple = document.createElement('span');
-    ripple.style.cssText = `
-      position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      left: ${x}px;
-      top: ${y}px;
-      background: radial-gradient(circle, rgba(0, 217, 255, 0.6) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-      transform: scale(0);
-      animation: ripple 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    `;
-    
-    element.style.position = 'relative';
-    element.style.overflow = 'hidden';
-    element.appendChild(ripple);
-    
-    setTimeout(() => ripple.remove(), 600);
-  }
-
-  // Shake animation
-  static shake(element, intensity = 5) {
-    element.style.animation = `shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97)`;
-    
-    setTimeout(() => {
-      element.style.animation = '';
-    }, 500);
-  }
-
-  // Glow effect
-  static addGlow(element, color = '#00d9ff', duration = 2000) {
-    element.style.transition = 'box-shadow 0.3s ease';
-    element.style.boxShadow = `0 0 20px ${color}80`;
-    
-    setTimeout(() => {
-      element.style.boxShadow = '';
-    }, duration);
-  }
-
-  // Create floating text
-  static floatingText(text, x, y, color = '#00d9ff') {
-    const floater = document.createElement('div');
-    floater.textContent = text;
-    floater.style.cssText = `
-      position: fixed;
-      left: ${x}px;
-      top: ${y}px;
-      color: ${color};
-      font-weight: 600;
-      pointer-events: none;
-      z-index: 1000;
-      animation: float-up 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-    `;
-    
-    document.body.appendChild(floater);
-    
-    setTimeout(() => floater.remove(), 2000);
-  }
+  /* Статические методы утилит удалены */
 }
 
 // New class to manage dashboard specific logic
@@ -476,11 +349,7 @@ class DashboardManager {
 document.addEventListener('DOMContentLoaded', () => {
   const spaceEffects = new SpaceEffects();
   
-  document.querySelectorAll('button, .btn-cosmic-primary').forEach(button => {
-    button.addEventListener('click', (e) => {
-      SpaceEffects.createRipple(button, e);
-    });
-  });
+  /* Эффект ряби на кнопках удален */
 
   const serverIssDataElement = document.getElementById('server-iss-data');
   if (serverIssDataElement) {
