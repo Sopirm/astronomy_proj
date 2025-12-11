@@ -23,9 +23,6 @@ router.get('/', (req, res) => res.redirect('/dashboard'));
 // Дашборд - общий обзор
 router.get('/dashboard', (req, res) => dashboardController.index(req, res));
 
-// МКС - отдельная страница для МКС функций
-router.get('/iss', (req, res) => issController.index(req, res));
-
 // OSDR - отдельная страница для космических экспериментов  
 router.get('/osdr', (req, res) => osdrController.index(req, res));
 
