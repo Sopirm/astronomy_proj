@@ -17,7 +17,7 @@ WORKDIR /build
 COPY package*.json ./
 
 # Установка зависимостей
-RUN npm install --production --silent
+RUN npm install --silent
 
 # ===== PRODUCTION STAGE =====
 FROM node:18-alpine AS production

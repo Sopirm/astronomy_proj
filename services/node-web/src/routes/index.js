@@ -4,6 +4,7 @@ const IssController = require('../controllers/IssController');
 const OsdrController = require('../controllers/OsdrController');
 const ProxyController = require('../controllers/ProxyController');
 const AstroController = require('../controllers/AstroController');
+const LegacyController = require('../controllers/LegacyController'); // Новый контроллер
 
 const router = express.Router();
 
@@ -13,6 +14,7 @@ const issController = new IssController();
 const osdrController = new OsdrController();
 const proxyController = new ProxyController();
 const astroController = new AstroController();
+const legacyController = new LegacyController(); // Инициализация нового контроллера
 
 // ===== ОСНОВНЫЕ СТРАНИЦЫ =====
 // Разделение логики на контексты (требование info.txt)
@@ -64,6 +66,11 @@ router.get('/api/jwst/feed', (req, res) => dashboardController.jwstFeed(req, res
 
 // Астрономические события API - ТОЧНАЯ совместимость
 router.get('/api/astro/events', (req, res) => astroController.events(req, res));
+
+// Legacy API - для получения CSV данных
+router.get('/api/legacy/data', (req, res) => legacyController.getCSVData(req, res));
+// Legacy API - для экспорта в XLSX
+router.get('/api/legacy/export-xlsx', (req, res) => legacyController.exportXLSX(req, res));
 
 // ===== CMS СОВМЕСТИМОСТЬ (если понадобится) =====
 router.get('/page/:slug', (req, res) => {

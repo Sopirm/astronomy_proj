@@ -6,43 +6,66 @@
     <h1 class="text-4xl font-bold text-gray-900">
       📊 Legacy Pascal - CSV данные
     </h1>
-    <p class="text-gray-600 mt-2">Исторические данные телеметрии от Pascal модуля (работает с 2008 года)</p>
+    
   </div>
 
-  <!-- Coming Soon -->
-  <div class="space-card rounded-lg p-12 text-center">
-    <div class="text-8xl mb-6">⚙️</div>
-    <h2 class="text-2xl font-bold text-gray-900 mb-4">Раздел в разработке</h2>
-    <p class="text-gray-600 mb-6 max-w-2xl mx-auto">
-      Здесь будет реализована визуализация CSV данных от Pascal legacy модуля в виде полноценных таблиц 
-      с возможностью экспорта в XLSX формат согласно техническому заданию.
-    </p>
-    
-    <!-- Features Preview -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-      <div class="bg-white border border-gray-200 rounded-lg p-4">
-        <div class="text-2xl mb-2">📋</div>
-        <h4 class="font-semibold text-gray-900 mb-2">CSV таблицы</h4>
-        <p class="text-sm text-gray-600">Визуализация CSV в виде полноценных таблиц</p>
+  <!-- Filter and Export Controls -->
+  <div class="space-card rounded-lg p-6 mb-6">
+    <div class="flex items-center justify-between flex-wrap gap-4">
+      <div class="flex items-center space-x-4">
+        <h3 class="text-lg font-semibold text-gray-900">📈 Данные телеметрии</h3>
+        <input type="text" id="search-input" placeholder="🔍 Поиск..." 
+               class="bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm w-48 focus:border-blue-500 focus:outline-none text-gray-900">
       </div>
-      
-      <div class="bg-white border border-gray-200 rounded-lg p-4">
-        <div class="text-2xl mb-2">📊</div>
-        <h4 class="font-semibold text-gray-900 mb-2">Форматы данных</h4>
-        <p class="text-sm text-gray-600">Timestamp, логические блоки, числа, строки</p>
-      </div>
-      
-      <div class="bg-white border border-gray-200 rounded-lg p-4">
-        <div class="text-2xl mb-2">📥</div>
-        <h4 class="font-semibold text-gray-900 mb-2">Экспорт XLSX</h4>
-        <p class="text-sm text-gray-600">Алгоритм экспорта с подстановкой дат</p>
+      <div class="flex items-center space-x-3">
+        <span class="text-sm text-gray-600">
+          Показано: <span id="filtered-count" class="text-blue-600 font-semibold">0</span> из 
+          <span id="total-count" class="text-gray-900 font-semibold">0</span> записей
+        </span>
+        <button id="export-xlsx-btn" 
+                class="px-4 py-2 bg-green-100 hover:bg-green-200 border border-green-300 rounded-lg text-green-700 text-sm">
+          📥 Экспорт в XLSX
+        </button>
+        <button id="reset-filters-btn" 
+                class="px-3 py-1 bg-gray-100 hover:bg-gray-200 border border-gray-300 rounded text-gray-700 text-sm">
+          🔄 Сброс
+        </button>
       </div>
     </div>
+  </div>
 
-    <div class="mt-8 pt-6 border-t border-gray-300">
-      <p class="text-sm text-gray-600">
-        💡 Будет реализовано в следующих итерациях разработки
-      </p>
+  <!-- Data Table -->
+  <div id="data-table-section" class="space-card rounded-lg p-6" style="display: none;">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="recorded_at">Время <span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="voltage">Напряжение <span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="temp">Температура <span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="boolean_status">Статус<span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="numeric_value">Число <span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700 cursor-pointer hover:text-gray-900" data-sort="string_description">Описание<span class="sort-indicator">↕️</span></th>
+            <th class="text-left py-3 px-3 text-gray-700">Файл источника</th>
+          </tr>
+        </thead>
+        <tbody id="legacy-table-body">
+          <!-- Data will be loaded here by JavaScript -->
+        </tbody>
+      </table>
     </div>
+  </div>
+
+  <!-- Empty State -->
+  <div id="empty-state" class="text-center py-12 space-card rounded-lg" style="display: none;">
+    <div class="text-6xl mb-4 text-gray-500">📊</div>
+    <h3 class="text-xl font-semibold text-gray-900 mb-2">Данные не найдены</h3>
+    <p class="text-gray-600">Проверьте, генерируются ли CSV-файлы или измените параметры поиска</p>
+    <button class="mt-4 px-4 py-2 bg-blue-100 hover:bg-blue-200 border border-blue-300 rounded text-blue-700"
+            onclick="window.location.reload()">
+      🔄 Обновить страницу
+    </button>
   </div>
 </div>
+
+<script src="/js/legacy-page.js" defer></script>

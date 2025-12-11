@@ -116,6 +116,8 @@ services:
       - backend
     ports:
       - "3001:3001"
+    volumes:
+      - csvdata:/data/csv
 
   nginx:
     image: nginx:1.27-alpine

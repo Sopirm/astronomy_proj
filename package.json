@@ -1,5 +1,6 @@
 {
   "dependencies": {
-    "ejs-mate": "^4.0.0"
+    "ejs-mate": "^4.0.0",
+    "exceljs": "^4.4.0"
   }
 }
