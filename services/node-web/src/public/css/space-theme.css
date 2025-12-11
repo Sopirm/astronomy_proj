@@ -3,44 +3,25 @@
 
 /* ===== CSS CUSTOM PROPERTIES ===== */
 :root {
-  /* Advanced Color System */
-  --space-black: #000014;
-  --space-dark-blue: #0a0e1a;
-  --space-blue: #1a1f3a;
-  --space-light-blue: #2d3561;
+  /* Simplified Color System */
+  --bg-primary: #f8fafc; /* Light background */
+  --bg-secondary: #ffffff; /* White background for cards */
+  --text-primary: #1f2937; /* Dark text */
+  --text-secondary: #4b5563; /* Muted text */
+  --border-color: #e5e7eb; /* Light border */
   
-  /* Neon Palette */
-  --neon-blue: #00d9ff;
-  --neon-purple: #b084ff;
-  --neon-green: #00ff88;
-  --neon-pink: #ff0080;
-  --neon-yellow: #ffff00;
-  --neon-orange: #ff6600;
+  /* Accent Colors (keeping some for subtle highlights) */
+  --accent-blue: #2563eb; /* A standard blue */
+  --accent-green: #10b981; /* A standard green */
+  --accent-red: #ef4444; /* A standard red */
+  --accent-yellow: #f59e0b; /* A standard yellow */
   
-  /* Gradients */
-  --cosmic-gradient: linear-gradient(135deg, var(--space-black) 0%, var(--space-dark-blue) 25%, var(--space-blue) 75%, var(--space-light-blue) 100%);
-  --aurora-gradient: linear-gradient(45deg, var(--neon-blue) 0%, var(--neon-purple) 50%, var(--neon-pink) 100%);
-  --nebula-gradient: radial-gradient(ellipse at center, rgba(0, 217, 255, 0.3) 0%, transparent 70%);
-  
-  /* Animations */
-  --animation-fast: 0.2s;
-  --animation-normal: 0.4s;
-  --animation-slow: 0.8s;
-
-  /* Overriding and adding from layout.ejs */
-  --space-dark: #030712; /* From dashboard.ejs, more specific */
-  --space-primary: #0f172a; /* From dashboard.ejs */
-  --space-secondary: #1e293b; /* From dashboard.ejs */
-  --space-tertiary: #334155; /* From dashboard.ejs */
-  --text-primary: #f8fafc; /* From dashboard.ejs */
-  --text-secondary: #cbd5e1; /* From dashboard.ejs */
-  --text-muted: #64748b; /* From dashboard.ejs */
-
-  --gradient-cosmic: linear-gradient(135deg, #030712 0%, #1e1b4b 50%, #312e81 100%); /* From dashboard.ejs */
-  --gradient-aurora: linear-gradient(45deg, #00d9ff, #b084ff, #00ff88); /* From dashboard.ejs */
-  --gradient-nebula: radial-gradient(circle at 30% 70%, #ff008040 0%, transparent 50%), 
-                     radial-gradient(circle at 70% 20%, #00d9ff40 0%, transparent 50%), 
-                     radial-gradient(circle at 50% 50%, #b084ff20 0%, transparent 50%); /* From dashboard.ejs */
+  /* Keeping some neon-like for specific highlights if needed, but simplified */
+  --neon-blue: #3b82f6; /* Tailwind blue-500 */
+  --neon-purple: #8b5cf6; /* Tailwind purple-500 */
+  --neon-green: #22c55e; /* Tailwind green-500 */
+  --neon-pink: #ec4899; /* Tailwind pink-500 */
+  --neon-yellow: #facc15; /* Tailwind yellow-400 */
 }
 
 /* Global Styles */
@@ -52,12 +33,8 @@ html {
   scroll-behavior: smooth;
 }
 
-body { 
-  background: var(--space-dark);
-  background-image: 
-    var(--gradient-nebula),
-    linear-gradient(135deg, var(--space-dark) 0%, var(--space-primary) 50%, var(--space-secondary) 100%);
-  background-attachment: fixed;
+body {
+  background: var(--bg-primary); /* Simplified background */
   color: var(--text-primary);
   min-height: 100vh;
   margin: 0;
@@ -65,10 +42,20 @@ body {
   overflow-x: hidden;
 }
 
-/* Advanced Cards */
+/* Remove animated background stars */
+body::before {
+  display: none;
+}
+
+@keyframes twinkle {
+  from { transform: none; }
+  to { transform: none; } /* Remove animation */
+}
+
+/* Advanced Cards - Simplified */
 .space-card {
-  background: #ffffff; /* White background for cards */
-  border: 1px solid rgba(229, 231, 235, 1); /* Light gray border */
+  background: var(--bg-secondary); /* White background for cards */
+  border: 1px solid var(--border-color); /* Light gray border */
   border-radius: 8px; /* Slightly smaller border radius */
   transition: all 0.2s ease-in-out; /* Simpler transition */
   position: relative;
@@ -90,150 +77,132 @@ body {
 .space-card:hover {
   transform: translateY(-2px); /* Slight lift on hover */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-  border-color: rgba(156, 163, 175, 1); /* Darker gray border on hover */
+  border-color: #9ca3af; /* Darker gray border on hover */
 }
 
 .space-card:hover::before {
   left: 0; /* No before effect */
 }
 
-/* Glow Effects */
-.glow-blue {
-  box-shadow: 0 0 20px rgba(0, 217, 255, 0.5);
-  animation: glow-pulse-blue 2s infinite alternate;
+/* Glow Effects - Simplified */
+.glow-blue, .glow-purple, .glow-green {
+  box-shadow: none; /* Remove glow effect */
+  animation: none; /* Remove animation */
 }
 
-.glow-purple {
-  box-shadow: 0 0 20px rgba(176, 132, 255, 0.5);
-  animation: glow-pulse-purple 2s infinite alternate;
+@keyframes glow-pulse-blue, @keyframes glow-pulse-purple, @keyframes glow-pulse-green {
+  from { box-shadow: none; }
+  to { box-shadow: none; }
 }
 
-.glow-green {
-  box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-  animation: glow-pulse-green 2s infinite alternate;
+/* Loading Animations - Removed */
+.loading {
+  animation: none; /* Remove animation */
 }
 
-/* Customizations from layout.ejs */
+@keyframes cosmic-pulse {
+  from { transform: none; }
+  to { transform: none; }
+}
+
+/* Floating Animation - Removed */
+.float {
+  animation: none; /* Remove animation */
+}
+
+@keyframes float {
+  from { transform: none; }
+  to { transform: none; }
+}
+
+/* Text Glow - Simplified */
+.text-glow {
+  text-shadow: none; /* Remove text glow */
+}
+
+/* Button Styles - Simplified */
 .btn-cosmic {
-  background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+  background: var(--accent-blue); /* Solid blue background */
   border: none;
   color: white;
-  padding: 12px 24px;
-  border-radius: 30px;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  padding: 10px 20px; /* Smaller padding */
+  border-radius: 6px; /* Less rounded */
+  font-weight: 500; /* Lighter font weight */
+  transition: background-color 0.2s ease-in-out, transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Simpler transitions */
   position: relative;
   overflow: hidden;
 }
 
 .btn-cosmic:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0, 217, 255, 0.4);
+  background-color: #1d4ed8; /* Darker blue on hover */
+  transform: translateY(-1px); /* Subtle lift */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .btn-cosmic::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
+  display: none; /* Remove complex before effect */
 }
 
-.btn-cosmic:hover::before {
-  left: 100%;
-}
-
+/* Maps - Simplified Border */
 #map {
-  height: 340px;
-  border-radius: 16px;
-  border: 2px solid rgba(0, 217, 255, 0.3);
+  border: 1px solid var(--border-color); /* Simplified border */
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
-  border-radius: 4px;
-}
-
+/* Scrollbar - Simplified Colors */
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, var(--neon-blue), var(--neon-purple));
-  border-radius: 4px;
+  background: var(--accent-blue); /* Solid blue scroll thumb */
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(180deg, var(--neon-purple), var(--neon-blue));
+  background: #1d4ed8; /* Darker blue on hover */
 }
 
-@media (max-width: 768px) {
-  .space-card:hover {
-    transform: none;
-  }
-}
-
+/* Navigation - Simplified */
 .nav-item {
-  @apply flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-medium relative overflow-hidden;
+  @apply flex items-center space-x-2 px-4 py-2 rounded-md text-sm font-medium relative;
   color: var(--text-secondary);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  background: transparent;
 }
 
 .nav-item:hover {
-  color: var(--neon-blue);
-  background: rgba(0, 217, 255, 0.1);
-  border-color: rgba(0, 217, 255, 0.3);
-  transform: translateY(-2px);
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.05); /* Light hover background */
+  transform: translateY(-1px); /* Subtle lift */
 }
 
 .nav-item.active {
-  color: var(--neon-blue);
-  background: rgba(0, 217, 255, 0.15);
-  border-color: rgba(0, 217, 255, 0.5);
-  box-shadow: 0 0 15px rgba(0, 217, 255, 0.3);
+  color: var(--accent-blue); /* Active blue text */
+  background: rgba(37, 99, 235, 0.1); /* Light blue active background */
+  box-shadow: none;
 }
 
 .nav-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 217, 255, 0.1), transparent);
-  transition: left 0.5s ease;
-}
-
-.nav-item:hover::before {
-  left: 100%;
+  display: none;
 }
 
 .nav-icon {
-  font-size: 1.2em;
-  filter: drop-shadow(0 0 3px currentColor);
+  font-size: 1.1em;
+  filter: none; /* Remove glow */
 }
 
 .mobile-nav-item {
-  @apply flex items-center space-x-3 px-4 py-3 rounded-lg text-base font-medium w-full;
+  @apply flex items-center space-x-3 px-4 py-2 rounded-md text-base font-medium w-full;
   color: var(--text-secondary);
-  transition: all 0.3s ease;
-  border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  background: transparent;
 }
 
 .mobile-nav-item:hover {
-  color: var(--neon-blue);
-  background: rgba(0, 217, 255, 0.1);
-  border-color: rgba(0, 217, 255, 0.2);
+  color: var(--text-primary);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .mobile-nav-item.active {
-  color: var(--neon-blue);
-  background: rgba(0, 217, 255, 0.15);
-  border-color: rgba(0, 217, 255, 0.4);
+  color: var(--accent-blue);
+  background: rgba(37, 99, 235, 0.1);
 }
 
 .mobile-menu-open #mobile-nav {
@@ -254,45 +223,37 @@ body {
 }
 
 .nav-item[data-tooltip]:hover::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: -35px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.9);
-  color: var(--text-primary);
-  padding: 6px 12px;
-  border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 100;
-  animation: tooltip-appear 0.2s ease;
+  background: rgba(0, 0, 0, 0.8); /* Darker tooltip background */
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  bottom: -30px; /* Adjust position */
+  animation: none; /* Remove animation */
 }
 
 @keyframes tooltip-appear {
-  0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
-  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  from { opacity: 0; transform: none; }
+  to { opacity: 1; transform: none; }
 }
 
 .form-input {
-  @apply bg-slate-700 bg-opacity-50 border border-slate-600 rounded-lg px-4 py-3 text-sm;
-  color: var(--text-primary);
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  @apply bg-white border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-900;
+  backdrop-filter: none; /* Remove blur */
+  transition: all 0.2s ease-in-out;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--neon-blue);
-  box-shadow: 0 0 0 3px rgba(0, 217, 255, 0.1);
-  background: rgba(30, 41, 59, 0.7);
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* Lighter shadow */
+  background: #ffffff; /* White background */
 }
 
 .form-select {
   @apply form-input cursor-pointer;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2300d9ff' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-  background-position: right 12px center;
-  background-repeat: no-repeat;
-  background-size: 16px;
-  padding-right: 40px;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%234b5563' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); /* Darker arrow */
+  background-position: right 10px center;
+  background-size: 14px;
+  padding-right: 30px;
 }
